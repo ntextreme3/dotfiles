@@ -1,0 +1,85 @@
+
+" vars
+set nocompatible
+
+" pathogen
+call pathogen#infect()
+syntax on
+filetype plugin indent on
+
+" set the color scheme
+colorscheme monokai
+
+" set basic utils
+set number
+set autoread
+set list
+set autochdir
+
+" searching, casing, cursor line
+set cursorline
+set smartcase
+set hlsearch
+set incsearch
+set ic
+set showmatch
+
+" activate mouse
+set mouse=a
+
+" encoding
+set encoding=utf8
+
+" backup
+set nobackup
+set nowb
+set noswapfile
+
+" spaces instead of tabs
+set expandtab
+set smarttab
+
+set ai " auto indednt
+set si " smart indent
+
+" always show the status bar
+set laststatus=2
+
+
+" for python, try to remove trialing whitespace on save
+
+func! RemoveTrailingWhiteSpace()
+        exe "normal mz"
+        %s/\s\+$//ge
+        exe "normal `z"
+endfunc
+autocmd BufWrite *.py :call RemoveTrailingWhiteSpace()
+
+" NERDTree
+map <C-n> :NERDTreeToggle<CR>
+" show NERDTree hidden files
+let NERDTreeShowHidden=1
+" default to NERDTree if no files specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" close if all files closed
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" show the nice glyphs for git for it
+let g:airline_powerline_fonts = 1
+" fix background redraw
+set t_ut=
+nnoremap <F5> :set invpaste paste?<Enter>
+imap <F5> <C-O><F5>
+set pastetoggle=<F5>
+
+
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 expandtab
+
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
+nnoremap <C-k> :tabnew
+
+let g:go_version_warning = 0
+let g:go_fmt_options = ''
+
