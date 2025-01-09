@@ -19,12 +19,3 @@ rustup default stable
 
 # install crates
 cargo install git-delta
-
-# setup externals
-for file in ~/.tools/.setup-scripts/*; do
-    if [ -f "$file" ] && ! command -v $(basename ${file}); then
-        bash "$file"
-    else
-        echo "$(basename ${file}) already exists"
-    fi
-done

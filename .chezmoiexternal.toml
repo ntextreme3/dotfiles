@@ -21,6 +21,13 @@
     stripComponents = 1
     checksum.sha256 = "f92bf5db248417e6f62df1debc0dfe4f071f36f9c66bdf11c37c9c5712b06915"
 
+[".pyenv"]
+    type = "archive"
+    url = "https://github.com/pyenv/pyenv/archive/refs/tags/v2.5.0.zip"
+    exact = false
+    stripComponents = 1
+    checksum.sha256 = "d655a40d0fc02904c24f6fec697eba845724818fc0cb9fddf186a6186aa50921"
+
 [".pyenv/plugins/pyenv-virtualenv"]
     type = "archive"
     url = "https://github.com/pyenv/pyenv-virtualenv/archive/refs/tags/v1.2.4.zip"
@@ -34,12 +41,3 @@
     exact = true
     stripComponents = 1
     checksum.sha256 = "9b50d624570504a18f434e2300030e30af6290d5a79317f6dddc6e75ace9e52e"
-
-# These custom install scripts below will be run by a chezmoi script. Setting
-# the script name to the name of the command is a hack to make it easier to
-# check if it's already installed before doing anything.
-
-[".tools/.setup-scripts/pyenv"]
-    type = "file"
-    url = "https://raw.githubusercontent.com/pyenv/pyenv-installer/86a08ac9e38ec3a267e4b5c758891caf1233a2e4/bin/pyenv-installer"
-    checksum.sha256 = "a1ad63c22842dce498b441551e2f83ede3e3b6ebb33f62013607bba424683191"
