@@ -11,7 +11,7 @@
 # WARNING: You can't track the same file in both, but, if truly needed, you can
 # use a `modify_` script to edit part of a file:
 # https://www.chezmoi.io/user-guide/manage-different-types-of-file/#manage-part-but-not-all-of-a-file
-alias chezwork="chezmoi -S ~/.local/share/chezmoi_work -C ~/.config/chezmoi_work/chezmoi.toml"
+alias chezwork="chezmoi -S ~/.local/share/chezmoi_work -c ~/.config/chezmoi_work/chezmoi.toml"
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
