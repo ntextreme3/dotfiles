@@ -1,0 +1,45 @@
+[".vim/autoload/pathogen.vim"]
+    type = "archive-file"
+    url = "https://github.com/tpope/vim-pathogen/archive/refs/tags/v2.4.zip"
+    exact = true
+    stripComponents = 1
+    path = "autoload/pathogen.vim"
+    checksum.sha256 = "99f36aad26c0b2193bfc7ea7281f5446df797f40430c72409ac93a97f6a115f7"
+
+[".vim/bundle/nerdtree"]
+    type = "archive"
+    url = "https://github.com/preservim/nerdtree/archive/refs/tags/7.1.3.zip"
+    exact = true
+    stripComponents = 1
+    checksum.sha256 = "50efbe01a9cff44e0cdbe7d257f1094f424914451b6fd215c5803266aad0f199"
+
+[".tmux/plugins/tpm"]
+    # Add tmux plugins to ~/.tmux.conf
+    type = "archive"
+    url = "https://github.com/tmux-plugins/tpm/archive/refs/tags/v3.1.0.zip"
+    exact = true
+    stripComponents = 1
+    checksum.sha256 = "f92bf5db248417e6f62df1debc0dfe4f071f36f9c66bdf11c37c9c5712b06915"
+
+[".pyenv/plugins/pyenv-virtualenv"]
+    type = "archive"
+    url = "https://github.com/pyenv/pyenv-virtualenv/archive/refs/tags/v1.2.4.zip"
+    exact = true
+    stripComponents = 1
+    checksum.sha256 = "75a0041abeaa41047111566514a12fcd35aaabf0beac60c33d8632cc13d98880"
+
+[".nvm"]
+    type = "archive"
+    url = "https://github.com/nvm-sh/nvm/archive/refs/tags/v0.40.1.zip"
+    exact = true
+    stripComponents = 1
+    checksum.sha256 = "9b50d624570504a18f434e2300030e30af6290d5a79317f6dddc6e75ace9e52e"
+
+# These custom install scripts below will be run by a chezmoi script. Setting
+# the script name to the name of the command is a hack to make it easier to
+# check if it's already installed before doing anything.
+
+[".tools/.setup-scripts/pyenv"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/pyenv/pyenv-installer/86a08ac9e38ec3a267e4b5c758891caf1233a2e4/bin/pyenv-installer"
+    checksum.sha256 = "a1ad63c22842dce498b441551e2f83ede3e3b6ebb33f62013607bba424683191"
