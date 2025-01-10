@@ -18,4 +18,4 @@ fi
 rustup default stable
 
 # install crates
-cargo install git-delta
+cargo install --locked git-delta starship
