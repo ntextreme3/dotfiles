@@ -13,7 +13,11 @@
     gpgsign = true
 
 [gpg]
+{{- if eq .gpgformat "gpg" }}
     program = gpg
+{{- else }}
+    format = {{ .gpgformat | quote }}
+{{- end -}}
 {{- end }}
 
 [user]
