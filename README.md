@@ -9,6 +9,11 @@ All my settings, managed by chezmoi!
 sudo snap install --classic chezmoi
 
 chezmoi init --apply --verbose https://github.com/ntextreme3/dotfiles.git
+
+# Hack: Should run chezmoi apply again until I get all this working
+# right. delta is installed, but not yet on PATH, so .gitconfig doesn't
+# see it til the next run. 
+chezmoi apply
 ```
 
 ## Full Setup
