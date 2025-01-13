@@ -1,0 +1,4 @@
+Include config.d/*
+
+# To specify custom config, please create a new file in ~/.ssh/config.d
+# This file (~/.ssh/config) always needs to have 'Include config.d/*' as the first line
