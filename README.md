@@ -12,7 +12,7 @@ chezmoi init --apply --verbose https://github.com/ntextreme3/dotfiles.git
 
 # Hack: Should run chezmoi apply again until I get all this working
 # right. delta is installed, but not yet on PATH, so .gitconfig doesn't
-# see it til the next run. 
+# see it til the next run.
 chezmoi apply
 ```
 
@@ -52,8 +52,83 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 ### Windows Terminal
 
-- copy settings
-- set font to firacode
+- <details>
+    <summary>Copy settings (or use these for some good defaults)</summary>
+
+    ```jsonc
+    {
+        "$help": "https://aka.ms/terminal-documentation",
+        "$schema": "https://aka.ms/terminal-profiles-schema",
+        "actions":
+        [
+            {
+                "command": "paste",
+                "id": "User.paste",
+                "keys": "shift+insert"
+            },
+            {
+                "command":
+                {
+                    "action": "prevTab"
+                },
+                "id": "User.prevTab.0",
+                "keys": "ctrl+pgup"
+            },
+            {
+                "command":
+                {
+                    "action": "nextTab"
+                },
+                "id": "User.nextTab.0",
+                "keys": "ctrl+pgdn"
+            }
+        ],
+        "copyOnSelect": true,
+        "defaultProfile": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
+        "newTabMenu":
+        [
+            {
+                "type": "remainingProfiles"
+            }
+        ],
+        "profiles":
+        {
+            "defaults": {},
+            "list":
+            [
+                {
+                    "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                    "hidden": false,
+                    "name": "Windows PowerShell"
+                },
+                {
+                    "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                    "hidden": false,
+                    "name": "cmd"
+                },
+                {
+                    "bellStyle":
+                    [
+                        "window",
+                        "taskbar"
+                    ],
+                    "font":
+                    {
+                        "face": "Fira Code"
+                    },
+                    "guid": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
+                    "hidden": false,
+                    "name": "Ubuntu-24.04",
+                    "source": "Windows.Terminal.Wsl"
+                }
+            ]
+        },
+        "schemes": [],
+        "tabSwitcherMode": "disabled",
+        "themes": []
+    }
+    ```
+  </details>
 
 ### Slack
 
@@ -66,13 +141,30 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 ### Sublime Text 3
 
-- copy `%APPDATA%/Sublime` from old laptop
-- restore drafts
-- restore settings (the "User" package)
-- install Package Control (probably manually, bc proxy)
-  - package Control should install all extensions from settings
+- copy `%APPDATA%/Sublime Text 3` from old laptop
+    - restore drafts
+    - <details>
+        <summary>restore settings (the "User" package, or merge with this:)</summary>
+
+        ```json
+        {
+            "default_line_ending": "unix",
+            "highlight_modified_tabs": true,
+            "index_files": true,
+            "translate_tabs_to_spaces": true,
+            "update_check": false,
+            "word_wrap": true,
+            "wrap_width": 100
+        }
+        ```
+    - install Package Control (probably manually, bc proxy)
+    - package Control should install all extensions from settings
 - open files + drafts from original
 - register with my Personal license
+
+
+
+</details>
 
 ### wsl2
 
