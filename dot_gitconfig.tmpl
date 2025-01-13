@@ -26,6 +26,11 @@
 {{- if .signingkey }}
     signingkey = {{ .signingkey | quote }}
 {{- end }}
+{{- if eq .gpgformat "ssh" }}
+
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+{{- end }}
 
 [include]
 {{- if lookPath "delta" }}
