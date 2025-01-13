@@ -1,6 +1,6 @@
 {{- $email := promptStringOnce . "email" "Which email address would you like to configure for git" -}}
 {{- $gpgformats := list "ssh" "gpg" -}}
-{{- $gpgformat := promptChoiceOnce . "format" "Which git gpg format will you use" $gpgformats -}}
+{{- $gpgformat := promptChoiceOnce . "gpgformat" "Which git gpg format will you use" $gpgformats -}}
 {{- $sk := promptStringOnce . "signingkey" "Which signingkey would you like to sign commits with" -}}
 [data]
     email = {{ $email | quote }}
