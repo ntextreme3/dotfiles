@@ -1,0 +1,104 @@
+" ===============================
+" General Settings and Variables
+" ===============================
+" Disable compatibility with legacy vi
+set nocompatible
+
+" ===============================
+" Plugin Management
+" ===============================
+" Use pathogen to manage plugins
+call pathogen#infect()
+syntax on                    " Enable syntax highlighting
+filetype plugin indent on    " Enable filetype-specific plugins and indenting
+
+" ===============================
+" Appearance
+" ===============================
+colorscheme monokai          " Set the colorscheme to Monokai
+set number                   " Show line numbers
+set cursorline               " Highlight the current line
+set list                     " Show invisible characters
+set laststatus=2             " Always show the status bar
+
+" ===============================
+" Statusline Customization
+" ===============================
+" Define highlight group for the filename in the statusline
+hi StatusLineFile ctermfg=yellow ctermbg=brown
+
+" Configure the statusline
+set statusline=%#StatusLineFile#%f%*%=%m%r%h%w\ 🌍[%{&ff}]\ 📄[%Y]\ 🔒[%{&fileencoding}]\ 📊[%p%%]\ 🖉[%l,%c]
+
+" ===============================
+" Editing Behavior
+" ===============================
+set autoread                 " Auto-reload files if modified externally
+set autochdir                " Automatically change the working directory to the file's location
+set expandtab                " Use spaces instead of tabs
+set smarttab                 " Enable smart tab behavior (not needed here but retained if desired)
+set tabstop=4                " Number of spaces a <Tab> represents
+set shiftwidth=4             " Number of spaces for auto-indentation
+set softtabstop=4            " Number of spaces for <Tab> in insert mode
+set autoindent               " Automatically indent new lines
+set smartindent              " Smart auto-indentation for programming
+
+" ===============================
+" Search Settings
+" ===============================
+set hlsearch                 " Highlight search matches
+set incsearch                " Incremental search
+set smartcase                " Ignore case when searching unless uppercase is used
+set ignorecase               " Ignore case by default
+set showmatch                " Highlight matching parentheses/braces
+
+" ===============================
+" Mouse Support
+" ===============================
+set mouse=a                  " Enable mouse support in all modes
+
+" ===============================
+" Encoding
+" ===============================
+set encoding=utf8            " Use UTF-8 encoding
+
+" ===============================
+" Backup and Swap
+" ===============================
+set nobackup                 " Disable backup files
+set nowritebackup            " Disable write-backup files
+set noswapfile               " Disable swap files
+
+" ===============================
+" Auto-remove trailing whitespace on save
+" ===============================
+function! RemoveTrailingWhiteSpace()
+    execute "normal mz"
+    %s/\s\+$//ge
+    execute "normal `z"
+endfunction
+autocmd BufWritePre * :call RemoveTrailingWhiteSpace()
+
+" ===============================
+" NERDTree Settings
+" ===============================
+map <C-n> :NERDTreeToggle<CR>              " Toggle NERDTree with Ctrl+n
+let NERDTreeShowHidden=1                   " Show hidden files in NERDTree
+autocmd StdinReadPre * let s:std_in=1      " Open NERDTree if no file is specified
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" ===============================
+" Miscellaneous
+" ===============================
+set pastetoggle=<F5>                      " Toggle paste mode with F5
+nnoremap <F5> :set invpaste paste?<Enter> " Show paste mode status in command line
+imap <F5> <C-O><F5>
+
+" ===============================
+" Tab Navigation
+" ===============================
+nnoremap <C-k> :tabnew                " Open a new tab with Ctrl+k
+nnoremap <C-Left> :tabprevious<CR>    " Navigate to the previous tab with Ctrl+Left
+nnoremap <C-Right> :tabnext<CR>       " Navigate to the next tab with Ctrl+Right
+
