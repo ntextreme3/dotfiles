@@ -29,5 +29,8 @@ fi
 alias ll='ls -lF'
 alias la='ls -A'
 
+# BFG git repo cleaner
+alias bfg='java -jar /usr/share/java/bfg-1.14.0.jar'
+
 # Git
 alias gits="git -c delta.side-by-side=true"
