@@ -36,7 +36,6 @@ set statusline=%#StatusLineFile#%f%*%=%m%r%h%w\ 🌍[%{&ff}]\ 📄[%Y]\ 🔒[%{&
 set autoread                 " Auto-reload files if modified externally
 set autochdir                " Automatically change the working directory to the file's location
 set expandtab                " Use spaces instead of tabs
-set smarttab                 " Enable smart tab behavior (not needed here but retained if desired)
 set tabstop=4                " Number of spaces a <Tab> represents
 set shiftwidth=4             " Number of spaces for auto-indentation
 set softtabstop=4            " Number of spaces for <Tab> in insert mode
