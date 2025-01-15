@@ -6,4 +6,4 @@ export GPG_TTY=$(tty)
 
 export DOCKER_BUILDKIT=1
 
-PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
