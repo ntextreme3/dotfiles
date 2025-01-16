@@ -154,7 +154,8 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
             "translate_tabs_to_spaces": true,
             "update_check": false,
             "word_wrap": true,
-            "wrap_width": 100
+            // '0' wraps at window size
+            "wrap_width": 0
         }
         ```
     - install Package Control (probably manually, bc proxy)
