@@ -3,7 +3,7 @@ set -euo pipefail
 
 # install dependencies
 sudo apt update
-sudo apt install -y build-essential cmake
+sudo apt install -y --no-upgrade build-essential cmake
 
 # install pyenv recommended deps
 sudo apt install -y --no-upgrade build-essential libssl-dev zlib1g-dev \
@@ -11,16 +11,11 @@ sudo apt install -y --no-upgrade build-essential libssl-dev zlib1g-dev \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 # install things with apt
-missing_apts=$(python3 ${CHEZMOI_SOURCE_DIR}/_find_missing_packages.py tmux rg::ripgrep jq rustup tree)
-if [[ ! -z $missing_apts ]]; then
-    sudo apt install -y $missing_apts
-fi
+sudo apt install -y --no-upgrade tmux ripgrep jq rustup tree
 
 # install things with snap
-missing_snaps=$(python3 ${CHEZMOI_SOURCE_DIR}/_find_missing_packages.py jqp yq)
-if [[ ! -z $missing_snaps ]]; then
-    sudo snap install $missing_snaps
-fi
+sudo snap install jqp
+sudo snap install yq
 
 # setup rust
 rustup default stable
