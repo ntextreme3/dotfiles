@@ -4,6 +4,26 @@ All my settings, managed by chezmoi!
 
 ## Quick Start
 
+### wsl2
+
+- Create `.wslconfig` in `%UserProfile%` as:
+    ```
+    [wsl2]
+    memory=32GB
+
+    # Sets additional kernel parameters, in this case enabling older Linux base
+    # images such as Centos 6
+    # kernelCommandLine = vsyscall=emulate
+
+    [experimental]
+    autoMemoryReclaim=gradual
+    sparseVhd=true
+    ```
+  - If you don't do this step first: https://superuser.com/a/1834374/485811
+- Install the latest Ubuntu LTS from the Microsoft Store.
+
+### chezmoi
+
 ```
 # "--classic" mode gives apps more permissions
 sudo snap install --classic chezmoi
@@ -166,22 +186,6 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 
 </details>
-
-### wsl2
-
-- `.wslconfig` in `C:\Users\<user>`
-    ```
-    [wsl2]
-    memory=32GB
-
-    # Sets additional kernel parameters, in this case enabling older Linux base
-    # images such as Centos 6
-    # kernelCommandLine = vsyscall=emulate
-
-    [experimental]
-    autoMemoryReclaim=gradual
-    sparseVhd=true
-    ```
 
 ## Smoke Tests
 
