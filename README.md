@@ -132,6 +132,7 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
                         "window",
                         "taskbar"
                     ],
+                    "colorScheme": "Campbell",
                     "font":
                     {
                         "face": "Fira Code"
