@@ -54,7 +54,8 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 - trackpad scroll = down moves down
 - do all windows updates
 - set system dark mode
-- set background
+- set accent color #9BCC29
+- set background (fill)
 - update explorer to show file extensions and hidden items
 - disable windows aero shake
     - `gpedit.msc > User Config > Admin Templates > Desktop > Turn off Aero Shake`
@@ -63,8 +64,7 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 ### Install
 
 - password manager
-- chocolatey
-    - firacode
+- Cascadia Code NF - https://github.com/microsoft/cascadia-code (or Fira Code)
 - insomnia
     - import all
     - setup proxies
@@ -197,3 +197,7 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
     - apt update
     - tmux session and restore
     - `code .` from in wsl
+ 
+## Teardown
+
+Reminder to purge old one.
