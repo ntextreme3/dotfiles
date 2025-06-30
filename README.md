@@ -65,10 +65,6 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 - password manager
 - Cascadia Code NF - https://github.com/microsoft/cascadia-code (or Fira Code)
-- insomnia
-    - import all
-    - setup proxies
-    - install plugin: https://insomnia.rest/plugins/insomnia-plugin-inception
 
 ### Windows Terminal
 
