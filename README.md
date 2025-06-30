@@ -73,76 +73,113 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
     ```jsonc
     {
-        "$help": "https://aka.ms/terminal-documentation",
-        "$schema": "https://aka.ms/terminal-profiles-schema",
-        "actions":
-        [
-            {
-                "command": "paste",
-                "id": "User.paste",
-                "keys": "shift+insert"
-            },
-            {
-                "command":
-                {
-                    "action": "prevTab"
-                },
-                "id": "User.prevTab.0",
-                "keys": "ctrl+pgup"
-            },
-            {
-                "command":
-                {
-                    "action": "nextTab"
-                },
-                "id": "User.nextTab.0",
-                "keys": "ctrl+pgdn"
-            }
-        ],
-        "copyOnSelect": true,
-        "defaultProfile": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
-        "newTabMenu":
-        [
-            {
-                "type": "remainingProfiles"
-            }
-        ],
-        "profiles":
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions":
+    [
         {
-            "defaults": {},
-            "list":
-            [
-                {
-                    "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                    "hidden": false,
-                    "name": "Windows PowerShell"
-                },
-                {
-                    "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-                    "hidden": false,
-                    "name": "cmd"
-                },
-                {
-                    "bellStyle":
-                    [
-                        "window",
-                        "taskbar"
-                    ],
-                    "colorScheme": "Campbell",
-                    "font":
-                    {
-                        "face": "Fira Code"
-                    },
-                    "guid": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
-                    "hidden": false,
-                    "name": "Ubuntu-24.04",
-                    "source": "Windows.Terminal.Wsl"
-                }
-            ]
+            "command":
+            {
+                "action": "prevTab"
+            },
+            "id": "User.prevTab.0"
         },
-        "schemes": [],
-        "tabSwitcherMode": "disabled",
-        "themes": []
+        {
+            "command":
+            {
+                "action": "nextTab"
+            },
+            "id": "User.nextTab.0"
+        }
+    ],
+    "copyFormatting": "none",
+    "copyOnSelect": true,
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "keybindings":
+    [
+        {
+            "id": "User.prevTab.0",
+            "keys": "ctrl+pgup"
+        },
+        {
+            "id": "User.nextTab.0",
+            "keys": "ctrl+pgdn"
+        },
+        {
+            "id": "Terminal.CopyToClipboard",
+            "keys": "ctrl+c"
+        },
+        {
+            "id": "Terminal.PasteFromClipboard",
+            "keys": "shift+insert"
+        }
+    ],
+    "newTabMenu":
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles":
+    {
+        "defaults": {},
+        "list":
+        [
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Command Prompt"
+            },
+            {
+                "font":
+                {
+                    "face": "Cascadia Code NF"
+                },
+                "guid": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
+                "hidden": true,
+                "name": "Ubuntu-24.04",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": true,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
+                "hidden": true,
+                "name": "Git Bash",
+                "source": "Git"
+            },
+            {
+                "bellStyle":
+                [
+                    "window",
+                    "taskbar"
+                ],
+                "colorScheme": "Campbell",
+                "font":
+                {
+                    "face": "Cascadia Code NF"
+                },
+                "guid": "{d8e96812-b789-5068-a5ae-10b2fb53e95f}",
+                "hidden": false,
+                "name": "Ubuntu 24.04.1 LTS",
+                "source": "CanonicalGroupLimited.Ubuntu24.04LTS_79rhkp1fndgsc"
+            }
+        ]
+    },
+    "schemes": [],
+    "tabSwitcherMode": "disabled",
+    "themes": []
     }
     ```
   </details>
