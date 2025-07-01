@@ -65,6 +65,14 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 - password manager
 - Cascadia Code NF - https://github.com/microsoft/cascadia-code (or Fira Code)
+- Logseq - https://logseq.com/
+- Sublime Text 3 - http://sublimetext.com/3
+- vs code 
+
+#### Microsoft Store
+
+- Windows Terminal
+- Slack
 
 ### Windows Terminal
 
@@ -220,6 +228,10 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 
 </details>
+
+## Startup Apps
+
+Run `shell:startup` and add shortcuts.
 
 ## Smoke Tests
 
