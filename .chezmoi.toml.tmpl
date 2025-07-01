@@ -3,7 +3,7 @@
 {{- $githubconnectformat := promptChoiceOnce . "gpgformat" "How will you authenticate with [public] github.com" $connectformats -}}
 {{- $gpgformats := list "ssh" "gpg" -}}
 {{- $gpgformat := promptChoiceOnce . "gpgformat" "How will you sign commits" $gpgformats -}}
-{{- $sk := promptStringOnce . "signingkey" "Which signingkey would you like to sign commits" -}}
+{{- $sk := promptStringOnce . "signingkey" "Which signingkey [value or path] would you like to use to sign commits" -}}
 
 {{- $osID := .chezmoi.os -}}
 {{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
