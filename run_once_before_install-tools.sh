@@ -11,11 +11,12 @@ sudo apt install -y --no-upgrade build-essential libssl-dev zlib1g-dev \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 # install things with apt
-sudo apt install -y --no-upgrade tmux ripgrep jq rustup tree
+sudo apt install -y --no-upgrade tmux ripgrep jq rustup tree kubectx fzf
 
 # install things with snap
 sudo snap install jqp
 sudo snap install yq
+sudo snap install kubectl --classic
 
 # setup rust
 rustup default stable
