@@ -1,6 +1,5 @@
-PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init - bash)"
-eval "$(pyenv virtualenv-init - bash)"
+# uv
+export UV_MANAGED_PYTHON=1
 
 # virtualenv defaults
 export VIRTUALENV_SYMLINK_APP_DATA=1
