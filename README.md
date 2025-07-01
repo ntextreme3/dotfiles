@@ -244,7 +244,7 @@ Run `shell:startup` and add shortcuts.
     - pip install numpy
     - git pull and commit
     - apt update
-    - tmux session and restore
+    - tmux session and restore (use `tpm` (prefix+I) to install plugins)
     - `code .` from in wsl
 
 ## Notes
