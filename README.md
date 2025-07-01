@@ -246,7 +246,11 @@ Run `shell:startup` and add shortcuts.
     - apt update
     - tmux session and restore
     - `code .` from in wsl
- 
+
+## Notes
+
+- might also want to consider copying `~/.bash_history`
+
 ## Teardown
 
 Reminder to purge old one.
