@@ -199,7 +199,11 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 
 ### vs-code
 
+> [!WARNING]
+> Launching from WSL might not work without updating everything
+
 - settings sync
+- update extensions
 
 ### Sublime Text 3
 
