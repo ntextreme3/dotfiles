@@ -253,4 +253,4 @@ Run `shell:startup` and add shortcuts.
 
 ## Teardown
 
-Reminder to purge old one.
+Reminder to purge old pc. Check the Teardown note.
