@@ -11,7 +11,7 @@ sudo apt install -y --no-upgrade build-essential libssl-dev zlib1g-dev \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 # install things with apt
-sudo apt install -y --no-upgrade tmux ripgrep jq rustup tree kubectx fzf
+sudo apt install -y --no-upgrade tmux ripgrep jq rustup tree kubectx fzf bash-completion
 
 # install things with snap
 sudo snap install jqp
