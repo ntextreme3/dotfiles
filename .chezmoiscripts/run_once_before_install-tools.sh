@@ -11,6 +11,7 @@ sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx fz
 # install tools with snap
 sudo snap install jqp
 sudo snap install yq
+sudo snap install go --classic
 sudo snap install kubectl --classic
 
 # setup rust
