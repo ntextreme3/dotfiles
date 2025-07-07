@@ -5,15 +5,10 @@ set -euo pipefail
 sudo apt update
 sudo apt install -y --no-upgrade build-essential cmake
 
-# install pyenv recommended deps
-sudo apt install -y --no-upgrade build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev curl git \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+# install tools with apt
+sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx fzf bash-completion
 
-# install things with apt
-sudo apt install -y --no-upgrade tmux ripgrep jq rustup tree kubectx fzf bash-completion
-
-# install things with snap
+# install tools with snap
 sudo snap install jqp
 sudo snap install yq
 sudo snap install kubectl --classic
@@ -21,5 +16,5 @@ sudo snap install kubectl --classic
 # setup rust
 rustup default stable
 
-# install crates
+# install tools with cargo
 cargo install --locked git-delta starship
