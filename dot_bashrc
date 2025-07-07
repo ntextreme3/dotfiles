@@ -26,7 +26,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-shopt -s globstar
+shopt -s globstar nullglob
 for file in ~/.bashrc.d/**/*.sh; do
-  source $file
+  source "$file"
 done
