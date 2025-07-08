@@ -17,5 +17,7 @@ sudo snap install kubectl --classic
 # setup rust
 rustup default stable
 
+# rustup upgrade ?
+
 # install tools with cargo
 cargo install --locked git-delta starship
