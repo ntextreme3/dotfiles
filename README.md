@@ -249,39 +249,20 @@ Run `shell:startup` and add shortcuts.
 
 ## Notes
 
-You might also want to consider merging / copying `~/.bash_history` from other PCs. This does a merge based on timestamp, and removes duplicates.
+You might also want to consider merging / copying `~/.bash_history` from other PCs. Below does NOT necessarily preserve timestamp order, but should be good enough if the history files are roughly in order.
 
 ```sh
 cp ~/.bash_history ~/.bash_history.backup
 cat .bash_history.backup.1 .bash_history.backup.2 .bash_history.backup.n \
-  | awk '
-      # whenever we see a timestamp line…
-      /^#/ {
-        ts = $0;           # save it
-        getline;           # read the next (command) line
-        cmd = $0;          # save the command
-        # emit a TSV record:   timestamp<TAB>command
-        print ts "\t" cmd
-      }
-    ' \
-  | sort -n -t $'\t' -k1,1 \
-  | awk -F $'\t' '
-      # skip any command we have already seen
-      !seen[$2]++ {
-        # print back to bash‐history format
-        print $1    # the "#<epoch>" line
-        print $2    # the command line
-      }
-    ' \
   > .bash_history.merged
 ```
 
 Inspect `.bash_history.merged` and if all looks good
 
 ```
-mv .bash_history.merged ~/.bash_history
 history -c
-history -r ~/.bash_history
+history -r .bash_history.merged
+history -w
 ```
 
 ## Teardown
