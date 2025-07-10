@@ -6,7 +6,7 @@ sudo apt update
 sudo apt install -y --no-upgrade build-essential cmake bash-completion
 
 # install tools with apt
-sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx
+sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx net-tools
 
 # install tools with snap
 sudo snap install jqp
