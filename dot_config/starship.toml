@@ -1,0 +1,3 @@
+# Apps I have installed via Snap (e.g. golang) have a slower startup time, just
+# for the first time they run after a restart.
+command_timeout=750
