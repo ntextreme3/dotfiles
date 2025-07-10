@@ -15,3 +15,6 @@
 # WARNING: If you set PROMPT_COMMAND directly, it will be overridden by starship.
 # https://starship.rs/
 eval "$(starship init bash)"
+
+# Enable fzf shell integration
+eval "$(fzf --bash)"
