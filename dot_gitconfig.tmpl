@@ -12,6 +12,9 @@
 [commit]
     gpgsign = true
 
+[alias]
+    root = rev-parse --show-toplevel
+
 [gpg]
 {{- if eq .gpgformat "gpg" }}
     program = gpg
