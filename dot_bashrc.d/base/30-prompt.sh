@@ -1,7 +1,3 @@
-# TODO: Should this go with "history"?
-# Save each command after executed
-PROMPT_COMMAND='history -a'
-
 #--------
 # # Going to give starship a try ...
 
@@ -16,5 +12,6 @@ PROMPT_COMMAND='history -a'
 # __PS_HOST='\[\e[32m\]\h\[\e[m\]'  # Color Host Green
 # PS1="$__XTERM_TITLE"'['"$__PS_USER@$__PS_HOST"' \W$(__git_ps1 " (%s)")]\$ '
 
+# WARNING: If you set PROMPT_COMMAND directly, it will be overridden by starship.
 # https://starship.rs/
 eval "$(starship init bash)"
