@@ -48,6 +48,7 @@ backup_bash_history() {
     # Find the next timestamp in the history file after the last backup
     local NEXT_TIMESTAMP=$(grep '^#' "$HISTFILE" | grep -A1 -F "$LATEST_BACKUP_CMD_TIME" | tail -n 1)
     if [[ -z "$NEXT_TIMESTAMP" ]]; then
+        # NOTE: If `erasedups` is enabled, this likely bloats the backup file.
         echo "Warning: Could not find where we left off in $HISTFILE. Copying the entire history file to $HIST_BACKUP_FILE." >&2
         cat "$HISTFILE" >> "$HIST_BACKUP_FILE"
         return 0
