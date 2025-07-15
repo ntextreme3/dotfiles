@@ -6,7 +6,7 @@ sudo apt update
 sudo apt install -y --no-upgrade build-essential cmake bash-completion
 
 # install tools with apt
-sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx net-tools
+sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx net-tools bat
 
 # install tools with snap
 sudo snap install jqp
@@ -24,3 +24,6 @@ cargo install --locked git-delta starship
 
 # install tools with go
 go install github.com/junegunn/fzf@latest
+
+# Add symlink for bat
+sudo ln -s "$(command -v batcat)" ~/.local/bin/bat
