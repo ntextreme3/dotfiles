@@ -75,6 +75,6 @@ backup_bash_history() {
 }
 backup_bash_history
 
-# Ensure a final write on exit:
-# trap 'history -a; history -w' EXIT
+# Write history before running each command:
+trap 'builtin history -a' DEBUG
 
