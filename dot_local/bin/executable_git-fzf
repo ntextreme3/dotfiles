@@ -1,3 +1,26 @@
-#!/bin/bash
-rg --files "$(git rev-parse --show-toplevel)" | fzf
+#!/usr/bin/env bash
+#
+# git-fzf: generic fzf-based file selector for the current Git repo
+#
+
+# fail if not in a git repo
+repo_root=$(git rev-parse --show-toplevel) || {
+  exit 1
+}
+
+# find files under the repo root and let fzf multi-select in a 40%-height window
+# ────────────────────────────────────────────────────────────────────────────────
+# --multi         : allow selecting multiple files
+# --height=40%    : take only 40% of the terminal height
+# --border        : draw a border
+# --layout=reverse: show prompt at the bottom
+# --preview       : live preview with bat, adjust or remove if you don’t have bat
+#
+rg --files "$repo_root" \
+    | fzf --multi \
+          --height=40% \
+          --layout=reverse \
+          --border \
+          --preview 'bat --style=numbers --color=always {}'  \
+          --preview-window=right:50%:wrap
 
