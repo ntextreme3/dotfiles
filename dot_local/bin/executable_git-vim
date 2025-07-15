@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# abort if not in a git repo
+root=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "Not a git repo."; exit 1; }
+
+# find files under the repo root and let fzf multi-select in a 40%-height window
+# ────────────────────────────────────────────────────────────────────────────────
+# --multi         : allow selecting multiple files
+# --height=40%    : take only 40% of the terminal height
+# --border        : draw a border
+# --layout=reverse: show prompt at the bottom
+# --preview       : live preview with bat, adjust or remove if you don’t have bat
+#
+selected=$(rg --files "$root" \
+    | fzf --multi \
+          --height=40% \
+          --layout=reverse \
+          --border \
+          --preview 'bat --style=numbers --color=always {}'  \
+          --preview-window=right:50%:wrap) \
+    || true
+
+# if nothing was selected (fzf returns non-zero or empty), just exit
+if [[ -z "$selected" ]]; then
+  exit 0
+fi
+
+# open your selections in vim (as separate splits/tabs depending on your vim config)
+vim $selected
+
