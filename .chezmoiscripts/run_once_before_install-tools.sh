@@ -24,6 +24,3 @@ cargo install --locked git-delta starship
 
 # install tools with go
 go install github.com/junegunn/fzf@latest
-
-# Add symlink for bat
-sudo ln -s "$(command -v batcat)" ~/.local/bin/bat
