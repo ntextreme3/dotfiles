@@ -16,7 +16,7 @@ repo_root=$(git rev-parse --show-toplevel) || {
 # --layout=reverse: show prompt at the bottom
 # --preview       : live preview with bat, adjust or remove if you don’t have bat
 #
-rg --files "$repo_root" \
+rg -. --files "$repo_root" \
     | fzf --multi \
           --height=40% \
           --layout=reverse \
