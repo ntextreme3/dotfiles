@@ -8,7 +8,7 @@ sudo apt install -y --no-upgrade build-essential cmake bash-completion
 # install tools with apt
 sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx net-tools xdg-utils wslu
 
-# install tools with snap
+# install tools with snap (on separate lines to avoid failures if one is already installed)
 sudo snap install jqp
 sudo snap install yq
 sudo snap install go --classic
