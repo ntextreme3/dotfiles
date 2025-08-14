@@ -6,7 +6,7 @@ sudo apt update
 sudo apt install -y --no-upgrade build-essential cmake bash-completion
 
 # install tools with apt
-sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx net-tools bat xdg-utils wslu
+sudo apt install -y --no-upgrade curl git tmux ripgrep jq rustup tree kubectx net-tools xdg-utils wslu
 
 # install tools with snap
 sudo snap install jqp
@@ -20,7 +20,7 @@ rustup default stable
 # rustup upgrade ?
 
 # install tools with cargo
-cargo install --locked git-delta starship
+cargo install --locked git-delta starship bat
 
 # install tools with go
 go install github.com/junegunn/fzf@latest
