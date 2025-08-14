@@ -29,11 +29,6 @@ All my settings, managed by chezmoi!
 sudo snap install --classic chezmoi
 
 chezmoi init --apply --verbose https://github.com/ntextreme3/dotfiles.git
-
-# Hack: Should run chezmoi apply again until I get all this working
-# right. delta is installed, but not yet on PATH, so .gitconfig doesn't
-# see it til the next run.
-chezmoi apply
 ```
 
 ## Full Setup
@@ -67,7 +62,7 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
 - Cascadia Code NF - https://github.com/microsoft/cascadia-code (or Fira Code)
 - Logseq - https://logseq.com/
 - Sublime Text 3 - http://sublimetext.com/3
-- vs code 
+- vs code
 
 #### Microsoft Store
 
