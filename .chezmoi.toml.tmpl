@@ -5,6 +5,7 @@
 {{- $gpgformat := promptChoiceOnce . "gpgformat" "How will you sign commits" $gpgformats -}}
 {{- $sk := promptStringOnce . "signingkey" "Which signingkey [value or path] would you like to use to sign commits" -}}
 
+{{/* inspiration from twpayne/dotfiles */}}
 {{- $osID := .chezmoi.os -}}
 {{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
 {{-   $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
