@@ -36,9 +36,7 @@
 {{- end }}
 
 [include]
-{{- if lookPath "delta" }}
     path = ~/.gitconfig.d/delta.gitconfig
-{{- end }}
 {{- if not (hasSuffix "@gmail.com" .email) }}
     path = ~/.gitconfig.d/work.gitconfig
 {{- end }}
