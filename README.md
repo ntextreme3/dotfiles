@@ -9,6 +9,7 @@ All my settings, managed by chezmoi!
 - Create `.wslconfig` in `%UserProfile%` as:
     ```
     [wsl2]
+    # choose some value that makes sense
     memory=32GB
 
     # Sets additional kernel parameters, in this case enabling older Linux base
@@ -236,10 +237,10 @@ Run `shell:startup` and add shortcuts.
 
 - wsl2
     - setup new venv
-    - pip install numpy
+    - install numpy
     - git pull and commit
     - apt update
-    - tmux session and restore (use `tpm` (prefix+I) to install plugins)
+    - tmux session and restore
     - `code .` from in wsl
 
 ## Notes
