@@ -20,7 +20,7 @@ rustup default stable
 # rustup upgrade ?
 
 # install tools with cargo
-cargo install --locked git-delta starship bat
+cargo install --locked git-delta starship bat fd-find
 
 # install tools with go
 go install github.com/junegunn/fzf@latest

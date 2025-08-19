@@ -4,7 +4,7 @@
 #
 
 # delegate selection to git-fzf
-files=$(git fzf) || exit 0
+files=$(git fzf "$@") || exit 0
 
 # if nothing selected, do nothing
 if [[ -z "$files" ]]; then

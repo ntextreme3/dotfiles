@@ -8,6 +8,18 @@ repo_root=$(git rev-parse --show-toplevel) || {
   exit 1
 }
 
+# default to searching for files
+search_type="f"
+
+# arg1 = -d → directories
+if [[ "$1" == "-d" ]]; then
+  search_type="d"
+  shift
+fi
+
+# arg2 (optional) = initial query
+initial_query="${1:-}"
+
 # find files under the repo root and let fzf multi-select in a 40%-height window
 # ────────────────────────────────────────────────────────────────────────────────
 # --multi         : allow selecting multiple files
@@ -16,11 +28,12 @@ repo_root=$(git rev-parse --show-toplevel) || {
 # --layout=reverse: show prompt at the bottom
 # --preview       : live preview with bat, adjust or remove if you don’t have bat
 #
-rg -. --files "$repo_root" \
+fd --hidden --follow --exclude ".git" --type "$search_type" . "$repo_root" \
     | fzf --multi \
           --height=40% \
           --layout=reverse \
           --border \
           --preview 'bat --style=numbers --color=always {}'  \
-          --preview-window=right:50%:wrap
+          --preview-window=right:50%:wrap \
+          --query="$initial_query"
 
