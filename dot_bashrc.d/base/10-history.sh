@@ -3,7 +3,7 @@
 HISTCONTROL=ignoreboth
 
 # Ignore certain commands
-HISTIGNORE="ls:bg:fg:history:pwd:tmux:rm:cd ..:jobs"
+HISTIGNORE="ls:ll:bg:fg:history:pwd:tmux:clear:exit:jobs:cd:rm *"
 
 # Show timestamps in history %F=YYYY-MM-DD and %T=HH:MM:SS
 HISTTIMEFORMAT='%F %T '
