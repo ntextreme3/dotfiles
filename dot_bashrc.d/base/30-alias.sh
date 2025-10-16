@@ -29,5 +29,12 @@ fi
 alias ll='ls -lF'
 alias la='ls -A'
 
-# Git
+# gits = "git side-by-side"
 alias gits="git -c delta.side-by-side=true"
+
+# can't setup multiple completions per command
+# _fzf_setup_completion path gits
+
+# NOTE: Not sure how portable this is yet ...
+_completion_loader git
+complete -o bashdefault -o default -o nospace -F __git_wrap__git_main gits
