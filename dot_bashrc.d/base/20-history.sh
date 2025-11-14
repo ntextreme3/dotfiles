@@ -25,7 +25,7 @@ backup_bash_history() {
     fi
 
     # Skip if we've backed up the history file in the last 24 hours.
-    local HIST_BACKUP_FILE="$HOME/.bash_history.golden"
+    local HIST_BACKUP_FILE="${HISTFILE}.golden"
     if [[ -f "$HIST_BACKUP_FILE" && $(find "$HIST_BACKUP_FILE" -mtime -1) ]]; then
         echo "Skipping backup: $HIST_BACKUP_FILE already exists and was updated in the last day." >&2
         return 0
