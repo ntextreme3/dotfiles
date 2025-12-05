@@ -29,7 +29,12 @@ rustup update stable
 rustup default stable
 
 # install tools with cargo
-cargo install --locked git-delta starship
+cargo install --locked git-delta
+
+# starship takes a long time with cargo, so:
+if ! command -v starship &> /dev/null; then
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+fi
 
 # install tools with go
 go install github.com/junegunn/fzf@latest
