@@ -1,0 +1,39 @@
+{{ if eq .osid "linux-rhel" -}}
+
+{{ $sudo := "sudo " -}}
+{{ if eq .chezmoi.username "root" -}}
+{{   $sudo = "" -}}
+{{ end -}}
+
+#!/bin/bash
+set -euo pipefail
+
+# Enable EPEL repository for additional packages
+{{ $sudo }}yum install -y epel-release
+
+# install dependencies
+{{ $sudo }}yum groupinstall -y "Development Tools"
+{{ $sudo }}yum install -y cmake bash-completion
+
+# install tools with yum
+{{ $sudo }}yum install -y curl git tmux ripgrep jq tree net-tools golang bat fd-find
+
+# install rustup (for latest rust - yum rust package is often outdated)
+if ! command -v rustup &> /dev/null; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    source "$HOME/.cargo/env"
+fi
+
+# update rust to latest
+rustup update stable
+rustup default stable
+
+# install tools with cargo
+cargo install --locked git-delta starship
+
+# install tools with go
+go install github.com/junegunn/fzf@latest
+
+# NOTE: Skipping kubectl, kubectx, yq, jqp for now.
+
+{{ end -}}
