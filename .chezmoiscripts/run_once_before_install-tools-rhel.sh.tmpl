@@ -1,22 +1,23 @@
 {{ if eq .osid "linux-rhel" -}}
 
-{{ $sudo := "sudo " -}}
-{{ if eq .chezmoi.username "root" -}}
-{{   $sudo = "" -}}
-{{ end -}}
-
 #!/bin/bash
 set -euo pipefail
 
+# Use sudo if it exists
+SUDO=""
+if command -v sudo &> /dev/null; then
+    SUDO="sudo"
+fi
+
 # Enable EPEL repository for additional packages
-{{ $sudo }}yum install -y epel-release
+$SUDO yum install -y epel-release
 
 # install dependencies
-{{ $sudo }}yum groupinstall -y "Development Tools"
-{{ $sudo }}yum install -y cmake bash-completion
+$SUDO yum groupinstall -y "Development Tools"
+$SUDO yum install -y cmake bash-completion
 
 # install tools with yum
-{{ $sudo }}yum install -y curl git tmux ripgrep jq tree net-tools golang bat fd-find
+$SUDO yum install -y curl git tmux ripgrep jq tree net-tools golang bat fd-find
 
 # install rustup (for latest rust - yum rust package is often outdated)
 if ! command -v rustup &> /dev/null; then
