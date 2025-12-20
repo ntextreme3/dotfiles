@@ -1,0 +1,9 @@
+{{ if eq .osid "linux-ubuntu" -}}
+
+#!/bin/bash
+set -euo pipefail
+
+# install pre-built rust tools
+cargo binstall --disable-telemetry --no-confirm git-delta starship bat fd-find
+
+{{ end -}}

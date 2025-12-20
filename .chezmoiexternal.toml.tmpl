@@ -70,4 +70,10 @@
     stripComponents = 1
     path = "bin/gh"
 
+[".cargo/bin/cargo-binstall"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "cargo-bins/cargo-binstall" "cargo-binstall-x86_64-unknown-linux-gnu.tgz" | quote }}
+    executable = true
+    path = "cargo-binstall"
+
 {{- end }}
