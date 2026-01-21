@@ -36,5 +36,29 @@ alias gits="git -c delta.side-by-side=true"
 # _fzf_setup_completion path gits
 
 # NOTE: Not sure how portable this is yet ...
-_completion_loader git
-complete -o bashdefault -o default -o nospace -F __git_wrap__git_main gits
+# Set up completion for gits alias to mirror git's completion
+# Defer setup to ensure git completion and fzf are both loaded
+_gits_complete_setup() {
+    local configured=""
+
+    # Load git completion if not already loaded
+    if ! declare -f __git_complete >/dev/null 2>&1; then
+        __load_completion git 2>/dev/null || return
+    fi
+
+    # Set up git completion for gits
+    if declare -f __git_complete >/dev/null 2>&1; then
+        __git_complete gits git
+        configured=1
+        # Add fzf path completion on top if available
+        if declare -f _fzf_setup_completion >/dev/null 2>&1; then
+            _fzf_setup_completion path gits 2>/dev/null
+        fi
+    fi
+
+    # Drop the bootstrap helper after the real completion is in place
+    if [ -n "$configured" ]; then
+        unset -f _gits_complete_setup
+    fi
+}
+complete -F _gits_complete_setup gits
