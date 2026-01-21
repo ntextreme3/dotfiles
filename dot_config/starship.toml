@@ -1,3 +1,19 @@
 # Apps I have installed via Snap (e.g. golang) have a slower startup time, just
 # for the first time they run after a restart.
 command_timeout=1000
+
+# https://github.com/starship/starship/issues/5954
+[python]
+disabled = true
+
+[custom.uv_python]
+description = "Show uv-managed Python version for this directory"
+command = "uv python find --show-version"
+# Only run in dirs that look like Python projects
+detect_files = ["pyproject.toml", "uv.lock", ".python-version", "requirements.txt"]
+# Optional: also trigger if there's Python files
+detect_extensions = ["py"]
+# Make it look like the python module
+symbol = "🐍 "
+format = "via [$symbol$output]($style) "
+style = "yellow bold"
