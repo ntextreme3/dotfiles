@@ -100,7 +100,7 @@ check_chezmoi_staleness() {
 
     if [[ -z "$LAST_CHEZMOI_TS" ]]; then
         # Never ran chezmoi (at least not in current history)
-        echo -e "\033[33m⚠️ chezmoi: No record of running chezmoi in your history. Run 'chezmoi apply' to sync dotfiles.\033[0m" >&2
+        echo -e "\033[33m⚠️ chezmoi not found in history, and may be stale. Run 'chezmoi status' to check.\033[0m" >&2
         mkdir -p "$(dirname "$STATE_FILE")"
         touch "$STATE_FILE"
         return 0
@@ -113,7 +113,7 @@ check_chezmoi_staleness() {
 
     if [[ $AGE -gt $STALE_SECONDS ]]; then
         local DAYS_AGO=$((AGE / 86400))
-        echo -e "\033[33m⚠️ chezmoi: Last run $DAYS_AGO days ago. Run 'chezmoi apply' to sync dotfiles.\033[0m" >&2
+        echo -e "\033[33m⚠️ chezmoi may be stale (-$DAYS_AGO days). Run 'chezmoi status' to check.\033[0m" >&2
         mkdir -p "$(dirname "$STATE_FILE")"
         touch "$STATE_FILE"
     fi
