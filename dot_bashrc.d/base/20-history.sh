@@ -27,7 +27,7 @@ backup_bash_history() {
     # Skip if we've backed up the history file in the last 24 hours.
     local HIST_BACKUP_FILE="${HISTFILE}.golden"
     if [[ -f "$HIST_BACKUP_FILE" && $(find "$HIST_BACKUP_FILE" -mtime -1) ]]; then
-        echo "Skipping backup: $HIST_BACKUP_FILE already exists and was updated in the last day." >&2
+        # echo "Skipping backup: $HIST_BACKUP_FILE already exists and was updated in the last day." >&2
         return 0
     fi
 
@@ -54,7 +54,7 @@ backup_bash_history() {
         return 0
     fi
     if [[ "$NEXT_TIMESTAMP" == "$LATEST_BACKUP_CMD_TIME" ]]; then
-        echo "No new commands to append to $HIST_BACKUP_FILE." >&2
+        # echo "No new commands to append to $HIST_BACKUP_FILE." >&2
         return 0
     fi
 
@@ -65,13 +65,13 @@ backup_bash_history() {
     local TOTAL_LINES=$(wc -l "$HISTFILE" | awk '{print $1}')
     local NUM_LINES_TO_APPEND=$((TOTAL_LINES - NEXT_TIMESTAMP_LINE_NUM + 1))
     if [[ $NUM_LINES_TO_APPEND -le 0 ]]; then
-        echo "No new commands to append to $HIST_BACKUP_FILE." >&2
+        # echo "No new commands to append to $HIST_BACKUP_FILE." >&2
         return 0
     fi
 
     # Append the new commands to the backup file
     tail -n "$NUM_LINES_TO_APPEND" "$HISTFILE" >> "$HIST_BACKUP_FILE"
-    echo "Appended $NUM_LINES_TO_APPEND lines to $HIST_BACKUP_FILE."
+    # echo "Appended $NUM_LINES_TO_APPEND lines to $HIST_BACKUP_FILE."
 }
 backup_bash_history
 
