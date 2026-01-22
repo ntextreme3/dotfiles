@@ -6,13 +6,23 @@ command_timeout=1000
 [python]
 disabled = true
 
-[custom.uv_python]
-description = "Show uv-managed Python version for this directory"
+[custom.uv_project]
+description = "Show Python version via uv for this directory/project"
 command = "uv python find --show-version"
+when = 'test -z "$VIRTUAL_ENV"'
 # Only run in dirs that look like Python projects
 detect_files = ["pyproject.toml", "uv.lock", ".python-version", "requirements.txt"]
 # Optional: also trigger if there's Python files
 detect_extensions = ["py"]
+# Make it look like the python module
+symbol = "🐍 "
+format = "via [$symbol$output]($style) "
+style = "yellow bold"
+
+[custom.uv_venv]
+description = "Show Python version via uv when VIRTUAL_ENV is active"
+command = 'printf "%s (%s)" "$(uv python find --show-version)" "$(basename "$VIRTUAL_ENV_PROMPT")"'
+when = 'test -n "$VIRTUAL_ENV"'
 # Make it look like the python module
 symbol = "🐍 "
 format = "via [$symbol$output]($style) "
