@@ -78,3 +78,45 @@ backup_bash_history
 # Write history before running each command:
 trap 'builtin history -a' DEBUG
 
+# Alert if chezmoi hasn't been run in a while (based on history).
+# This is a cheap local check - no network access.
+check_chezmoi_staleness() {
+    local STALE_DAYS=${1:-30}  # Default to 30 days
+    local STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/chezmoi_stale_check"
+
+    # Only alert once per day
+    if [[ -f "$STATE_FILE" && $(find "$STATE_FILE" -mtime -1 2>/dev/null) ]]; then
+        return 0
+    fi
+
+    if [[ -z "$HISTFILE" || ! -f "$HISTFILE" ]]; then
+        return 0
+    fi
+
+    # Find the last chezmoi command timestamp in history
+    # History format: #<unix_timestamp> on the line before the command
+    local LAST_CHEZMOI_TS
+    LAST_CHEZMOI_TS=$(grep -B1 '^chezmoi' "$HISTFILE" | grep '^#' | tail -n1 | tr -d '#')
+
+    if [[ -z "$LAST_CHEZMOI_TS" ]]; then
+        # Never ran chezmoi (at least not in current history)
+        echo -e "\033[33m⚠️ chezmoi: No record of running chezmoi in your history. Run 'chezmoi apply' to sync dotfiles.\033[0m" >&2
+        mkdir -p "$(dirname "$STATE_FILE")"
+        touch "$STATE_FILE"
+        return 0
+    fi
+
+    local NOW_TS
+    NOW_TS=$(date +%s)
+    local STALE_SECONDS=$((STALE_DAYS * 86400))
+    local AGE=$((NOW_TS - LAST_CHEZMOI_TS))
+
+    if [[ $AGE -gt $STALE_SECONDS ]]; then
+        local DAYS_AGO=$((AGE / 86400))
+        echo -e "\033[33m⚠️ chezmoi: Last run $DAYS_AGO days ago. Run 'chezmoi apply' to sync dotfiles.\033[0m" >&2
+        mkdir -p "$(dirname "$STATE_FILE")"
+        touch "$STATE_FILE"
+    fi
+}
+check_chezmoi_staleness
+
