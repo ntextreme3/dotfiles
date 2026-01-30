@@ -115,7 +115,7 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
         "copyFormatting": "none",
         "copyOnSelect": true,
         "defaultProfile": "{d8e96812-b789-5068-a5ae-10b2fb53e95f}",
-        "keybindings": 
+        "keybindings":
         [
             {
                 "id": "User.prevTab.0",
@@ -125,14 +125,16 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
                 "id": "User.nextTab.0",
                 "keys": "ctrl+pgdn"
             },
-            {
-                "id": "User.ScrollToPreviousMark",
-                "keys": "ctrl+up"
-            },
-            {
-                "id": "User.ScrollToNextMark",
-                "keys": "ctrl+down"
-            },
+            // Disabled these for now because I pretty much just use tmux, and
+            // these interfere with tmux resize-pane default keybindings
+            // {
+            //     "id": "User.ScrollToPreviousMark",
+            //     "keys": "ctrl+up"
+            // },
+            // {
+            //     "id": "User.ScrollToNextMark",
+            //     "keys": "ctrl+down"
+            // },
             {
                 "id": "Terminal.CopyToClipboard",
                 "keys": "ctrl+c"
