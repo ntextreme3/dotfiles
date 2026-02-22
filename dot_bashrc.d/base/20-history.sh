@@ -15,6 +15,11 @@ shopt -s histappend
 HISTSIZE=-1
 HISTFILESIZE=-1
 
+# If a null byte corrupts the history file, grep will think it's binary
+# and fail when attempting to read it. Since these bytes don't affect
+# history searching, use --text mode to keep going.
+GREP="grep --text"
+
 # Copy changes to $HISTFILE to a backup file, once per day.
 backup_bash_history() {
     # NOTE: This doesn't attempt to sort anything by time.
@@ -37,7 +42,7 @@ backup_bash_history() {
     fi
 
     # Find the last command that was backed up
-    local LATEST_BACKUP_CMD_TIME=$(grep '^#' "$HIST_BACKUP_FILE" | tail -n 1)
+    local LATEST_BACKUP_CMD_TIME=$($GREP '^#' "$HIST_BACKUP_FILE" | tail -n 1)
     if [[ -z "$LATEST_BACKUP_CMD_TIME" ]]; then
         # No previous backup timestamp found, copy the whole file
         echo "Warning: No previous backup found. Copying the entire history file to $HIST_BACKUP_FILE." >&2
@@ -46,7 +51,7 @@ backup_bash_history() {
     fi
 
     # Find the next timestamp in the history file after the last backup
-    local NEXT_TIMESTAMP=$(grep '^#' "$HISTFILE" | grep -A1 -F "$LATEST_BACKUP_CMD_TIME" | tail -n 1)
+    local NEXT_TIMESTAMP=$($GREP '^#' "$HISTFILE" | $GREP -A1 -F "$LATEST_BACKUP_CMD_TIME" | tail -n 1)
     if [[ -z "$NEXT_TIMESTAMP" ]]; then
         # NOTE: If `erasedups` is enabled, this likely bloats the backup file.
         echo "Warning: Could not find where we left off in $HISTFILE. Copying the entire history file to $HIST_BACKUP_FILE." >&2
@@ -59,7 +64,7 @@ backup_bash_history() {
     fi
 
     # Get the line number of this next timestamp
-    local NEXT_TIMESTAMP_LINE_NUM=$(grep -Fn "$NEXT_TIMESTAMP" "$HISTFILE" | tail -n 1 | cut -d: -f1)
+    local NEXT_TIMESTAMP_LINE_NUM=$($GREP -Fn "$NEXT_TIMESTAMP" "$HISTFILE" | tail -n 1 | cut -d: -f1)
 
     # Calculate how many lines to append
     local TOTAL_LINES=$(wc -l "$HISTFILE" | awk '{print $1}')
@@ -96,7 +101,7 @@ check_chezmoi_staleness() {
     # Find the last chezmoi command timestamp in history
     # History format: #<unix_timestamp> on the line before the command
     local LAST_CHEZMOI_TS
-    LAST_CHEZMOI_TS=$(grep -B1 '^chezmoi' "$HISTFILE" | grep '^#' | tail -n1 | tr -d '#')
+    LAST_CHEZMOI_TS=$($GREP -B1 '^chezmoi' "$HISTFILE" | $GREP '^#' | tail -n1 | tr -d '#')
 
     if [[ -z "$LAST_CHEZMOI_TS" ]]; then
         # Never ran chezmoi (at least not in current history)
