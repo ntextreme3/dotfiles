@@ -79,24 +79,24 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
     {
         "$help": "https://aka.ms/terminal-documentation",
         "$schema": "https://aka.ms/terminal-profiles-schema",
-        "actions": 
+        "actions":
         [
             {
-                "command": 
+                "command":
                 {
                     "action": "prevTab"
                 },
                 "id": "User.prevTab.0"
             },
             {
-                "command": 
+                "command":
                 {
                     "action": "nextTab"
                 },
                 "id": "User.nextTab.0"
             },
             {
-                "command": 
+                "command":
                 {
                     "action": "scrollToMark",
                     "direction": "previous"
@@ -104,12 +104,20 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
                 "id": "User.ScrollToPreviousMark"
             },
             {
-                "command": 
+                "command":
                 {
                     "action": "scrollToMark",
                     "direction": "next"
                 },
                 "id": "User.ScrollToNextMark"
+            },
+            {
+                "command":
+                {
+                    "action": "sendInput",
+                    "input": "\n"
+                },
+                "id": "User.SendNewLine"
             }
         ],
         "copyFormatting": "none",
@@ -142,22 +150,26 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
             {
                 "id": "Terminal.PasteFromClipboard",
                 "keys": "shift+insert"
+            },
+            {
+                "id": "User.SendNewLine",
+                "keys": "shift+enter"
             }
         ],
-        "newTabMenu": 
+        "newTabMenu":
         [
             {
                 "type": "remainingProfiles"
             }
         ],
-        "profiles": 
+        "profiles":
         {
-            "defaults": 
+            "defaults":
             {
                 "autoMarkPrompts": true,
                 "showMarksOnScrollbar": true
             },
-            "list": 
+            "list":
             [
                 {
                     "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
@@ -172,7 +184,7 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
                     "name": "Command Prompt"
                 },
                 {
-                    "font": 
+                    "font":
                     {
                         "face": "Cascadia Code NF"
                     },
@@ -182,13 +194,25 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
                     "source": "Windows.Terminal.Wsl"
                 },
                 {
-                    "bellStyle": 
+                    "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                    "hidden": true,
+                    "name": "Azure Cloud Shell",
+                    "source": "Windows.Terminal.Azure"
+                },
+                {
+                    "guid": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
+                    "hidden": true,
+                    "name": "Git Bash",
+                    "source": "Git"
+                },
+                {
+                    "bellStyle":
                     [
                         "window",
                         "taskbar"
                     ],
                     "colorScheme": "Campbell",
-                    "font": 
+                    "font":
                     {
                         "face": "Cascadia Code NF"
                     },
