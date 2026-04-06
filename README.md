@@ -194,18 +194,6 @@ Other things, like the dotfiles and such, I'll re-run whenever I setup a new VM,
                     "source": "Windows.Terminal.Wsl"
                 },
                 {
-                    "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                    "hidden": true,
-                    "name": "Azure Cloud Shell",
-                    "source": "Windows.Terminal.Azure"
-                },
-                {
-                    "guid": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
-                    "hidden": true,
-                    "name": "Git Bash",
-                    "source": "Git"
-                },
-                {
                     "bellStyle":
                     [
                         "window",
