@@ -7,6 +7,10 @@
 [core]
     # likely overridden by delta
     pager = less -F -X
+{{- if eq .chezmoi.os "linux" -}}
+{{/* LF -> CRLF on checkout, CRLF -> LF on commit */}}
+    autocrlf = input
+{{- end -}}
 {{- if .signingkey }}
 
 [commit]
