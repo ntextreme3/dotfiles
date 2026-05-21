@@ -17,6 +17,8 @@ cdr() {
       # ~/x and $HOME/x → x (dedup relative vs absolute forms)
       sub("^~/", home "/")
       sub("^" home "/", "")
+      # strip leading ../ segments (CWD context is lost)
+      while (sub("^\\.\\./", "")) {}
       gsub(/\/+$/, "")
       if ($0 != "" && !seen[$0]++) print
     }' |
