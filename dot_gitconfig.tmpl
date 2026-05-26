@@ -28,7 +28,7 @@
 {{- end }}
 
 [user]
-    name = Nik Trenchi
+    name = {{ .name | quote }}
     email = {{ .email | quote }}
 {{- if .signingkey }}
     signingkey = {{ .signingkey | quote }}

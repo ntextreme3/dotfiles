@@ -1,3 +1,4 @@
+{{- $name := promptStringOnce . "name" "What name would you like to use for git commits" -}}
 {{- $email := promptStringOnce . "email" "Which email address would you like to configure for git" -}}
 {{- $connectformats := list "ssh" "https" -}}
 {{- $githubconnectformat := promptChoiceOnce . "githubconnectformat" "How will you authenticate with [public] github.com" $connectformats -}}
@@ -12,6 +13,7 @@
 {{- end -}}
 
 [data]
+    name = {{ $name | quote }}
     email = {{ $email | quote }}
     signingkey = {{ $sk | quote }}
     gpgformat = {{ $gpgformat | quote }}
