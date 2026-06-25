@@ -41,7 +41,7 @@
 
 [include]
     path = ~/.gitconfig.d/delta.gitconfig
-{{- if not (hasSuffix "@gmail.com" .email) }}
+{{- if not (regexMatch "(gmail|github)\\.com$" .email) }}
     path = ~/.gitconfig.d/work.gitconfig
 {{- end }}
 
