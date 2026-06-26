@@ -6,7 +6,7 @@
 #   1. Pick a recent cd target from history (ctrl-d to skip stage 2)
 #   2. Locate it on the filesystem
 cdr() {
-  local out key query dir
+  local out key query dir initial_query="$1"
 
   # fc -lnr: no line numbers, reverse (most recent first)
   out=$(
@@ -24,6 +24,7 @@ cdr() {
     }' |
     command head -100 |
     command fzf --reverse --expect=ctrl-d \
+        ${initial_query:+--query "$initial_query"} \
         --header='enter=search for <dir> with fzf | ctrl-d=cd <dir>'
   ) || return
 
