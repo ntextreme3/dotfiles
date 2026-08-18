@@ -1,2 +1,9 @@
--w "\n"
-
+# Print a trailing newline after each transfer, so responses that don't end
+# in one don't collide with the shell prompt.
+#
+# `-w` writes to stdout by default, which is also where the response body
+# goes. So under `curl > file` the newline gets redirected into the file
+# along with the payload, corrupting binary downloads. `%{stderr}` moves the
+# rest of the format string to stderr: the newline still reaches the
+# terminal, but it can no longer end up in the file.
+-w "%{stderr}\n"
