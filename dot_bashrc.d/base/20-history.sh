@@ -80,6 +80,34 @@ backup_bash_history() {
 }
 backup_bash_history
 
+# Detect if .bash_history was overwritten/truncated by comparing against the
+# golden backup. I've lost history on occasion that went unnoticed for days.
+# Hopefully this helps point it out faster and maybe see why it happens.
+check_bash_history_integrity() {
+    local HIST_BACKUP_FILE="${HISTFILE}.golden"
+
+    if [[ -z "$HISTFILE" || ! -f "$HISTFILE" || ! -f "$HIST_BACKUP_FILE" ]]; then
+        return 0
+    fi
+
+    local HISTFILE_LINES
+    local GOLDEN_LINES
+    HISTFILE_LINES=$(wc -l < "$HISTFILE")
+    GOLDEN_LINES=$(wc -l < "$HIST_BACKUP_FILE")
+
+    if [[ $GOLDEN_LINES -le 0 ]]; then
+        return 0
+    fi
+
+    # Alert if the history file is less than 50% the size of the golden backup.
+    local RATIO=$(( (HISTFILE_LINES * 100) / GOLDEN_LINES ))
+    if [[ $RATIO -lt 50 ]]; then
+        echo -e "\033[31m🚨 bash_history looks truncated! $HISTFILE_LINES lines vs $GOLDEN_LINES in golden ($RATIO%).\033[0m" >&2
+        echo -e "\033[31m   Restore with: cp ~/.bash_history.golden ~/.bash_history && history -r\033[0m" >&2
+    fi
+}
+check_bash_history_integrity
+
 # Write history before running each command:
 trap 'builtin history -a' DEBUG
 
