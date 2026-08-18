@@ -11,3 +11,6 @@ PATH=$HOME/.cargo/bin:$PATH
 if command -v go &> /dev/null; then
     PATH=$(go env GOPATH)/bin:$PATH
 fi
+
+# pending: https://github.com/anthropics/claude-code/issues/85776
+export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
