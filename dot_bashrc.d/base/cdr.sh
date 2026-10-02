@@ -12,6 +12,10 @@ cdr() {
   out=$(
     command tac "${HISTFILE:-$HOME/.bash_history}" 2>/dev/null |
     command sed -n 's/^[[:space:]]*cd  *//p' |
+    # drop chained commands: `cd x && make` → x
+    command sed -E 's/[[:space:]]*(&&|\|\||[;|]).*//; s/[[:space:]]+$//' |
+    # command substitutions like `cd $(git root)` aren't reusable paths
+    command grep -vF '$(' |
     command grep -vxE '[._-]+([/._-]*)*|^$' |
     command awk -v home="$HOME" '{
       # ~/x and $HOME/x → x (dedup relative vs absolute forms)
