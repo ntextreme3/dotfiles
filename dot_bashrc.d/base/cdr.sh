@@ -8,9 +8,9 @@
 cdr() {
   local out key query dir initial_query="$1"
 
-  # fc -lnr: no line numbers, reverse (most recent first)
+  # Scan the whole history file, including other sessions. tac: most recent first.
   out=$(
-    fc -lnr -5000 2>/dev/null |
+    command tac "${HISTFILE:-$HOME/.bash_history}" 2>/dev/null |
     command sed -n 's/^[[:space:]]*cd  *//p' |
     command grep -vxE '[._-]+([/._-]*)*|^$' |
     command awk -v home="$HOME" '{
@@ -22,7 +22,7 @@ cdr() {
       gsub(/\/+$/, "")
       if ($0 != "" && !seen[$0]++) print
     }' |
-    command head -100 |
+    command head -1000 |
     command fzf --reverse --expect=ctrl-d \
         ${initial_query:+--query "$initial_query"} \
         --header='enter=search for <dir> with fzf | ctrl-d=cd <dir>'
