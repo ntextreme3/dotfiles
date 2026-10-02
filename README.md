@@ -273,6 +273,14 @@ Run `shell:startup` and add shortcuts.
     - tmux session and restore
     - `code .` from in wsl
 
+## Tests
+
+Shell function tests live in `tests/` (ignored by chezmoi) and use [bats](https://github.com/bats-core/bats-core):
+
+```sh
+npx bats@1.13.0 tests/
+```
+
 ## Notes
 
 You might also want to consider merging / copying `~/.bash_history` from other PCs. Below does NOT necessarily preserve timestamp order, but should be good enough if the history files are roughly in order.
