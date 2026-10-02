@@ -1,6 +1,6 @@
 # Tests for _cdr_candidates (dot_bashrc.d/base/cdr.sh)
 #
-# Run: npx bats@1.13.0 tests/
+# Run: prek run bats --all-files
 
 setup() {
   source "$BATS_TEST_DIRNAME/../dot_bashrc.d/base/cdr.sh"

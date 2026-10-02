@@ -32,6 +32,13 @@ sudo snap install --classic chezmoi
 chezmoi init --apply --verbose https://github.com/ntextreme3/dotfiles.git
 ```
 
+To make changes to this repo, install the pre-commit hooks (`uv` comes from the step above):
+
+```
+uv tool install prek
+chezmoi cd && prek install
+```
+
 ## Full Setup
 
 Basically, my target when getting a new PC / laptop.
@@ -275,10 +282,10 @@ Run `shell:startup` and add shortcuts.
 
 ## Tests
 
-Shell function tests live in `tests/` (ignored by chezmoi) and use [bats](https://github.com/bats-core/bats-core):
+Shell function tests live in `tests/` (ignored by chezmoi) and use [bats](https://github.com/bats-core/bats-core). The pre-commit hook runs them when `dot_bashrc.d/` or `tests/` changes. To run manually:
 
 ```sh
-npx bats@1.13.0 tests/
+prek run bats --all-files
 ```
 
 ## Notes
