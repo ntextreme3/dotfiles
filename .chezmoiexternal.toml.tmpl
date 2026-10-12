@@ -77,6 +77,11 @@
     stripComponents = 1
     path = "bin/gh"
 
+[".local/bin/herdr"]
+    type = "file"
+    url = {{ includeTemplate "github-release-asset-url" (dict "repo" "herdrdev/herdr" "asset" "herdr-linux-x86_64") | quote }}
+    executable = true
+
 [".cargo/bin/cargo-binstall"]
     type = "archive-file"
     url = {{ includeTemplate "github-release-asset-url" (dict "repo" "cargo-bins/cargo-binstall" "asset" "cargo-binstall-x86_64-unknown-linux-gnu.tgz") | quote }}
