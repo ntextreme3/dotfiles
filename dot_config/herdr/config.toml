@@ -1,0 +1,50 @@
+onboarding = false
+
+# Keybindings mirror ~/.tmux.conf (and tmux defaults) so herdr feels like tmux.
+# Herdr terms: workspace ≈ tmux session, tab ≈ tmux window, pane = pane.
+[keys]
+# C-a prefix, like screen / my tmux config
+prefix = "ctrl+a"
+
+# --- General ---
+# prefix+r reloads config (tmux: bind r source-file); resize mode moves off r
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+detach = "prefix+d"
+# prefix+s is choose-session in tmux; settings moves to S
+workspace_picker = "prefix+s"
+settings = "prefix+shift+s"
+# prefix+w is choose-tree in tmux
+goto = ["prefix+g", "prefix+w"]
+
+# --- Workspaces (tmux sessions) ---
+rename_workspace = "prefix+$"
+previous_workspace = "prefix+("
+next_workspace = "prefix+)"
+
+# --- Tabs (tmux windows) ---
+# new_tab (prefix+c), next/previous_tab (prefix+n/p), and switch_tab
+# (prefix+1..9) already match tmux defaults.
+rename_tab = "prefix+comma"
+close_tab = "prefix+ampersand"
+
+# --- Panes ---
+# tmux `"` stacks panes, `%` puts them side by side
+split_horizontal = "prefix+double_quote"
+split_vertical = "prefix+percent"
+# close_pane (prefix+x), zoom (prefix+z), and copy_mode (prefix+[) already
+# match tmux.
+last_pane = "prefix+semicolon"
+# prefix+o is next pane in tmux; M-n cycles panes (tmux: select-pane -t :.+ -Z)
+cycle_pane_next = ["prefix+o", "alt+n"]
+open_notification_target = "prefix+shift+o"
+# Alt+arrows switch panes without the prefix; prefix+arrows are tmux defaults
+focus_pane_left = ["prefix+h", "prefix+left", "alt+left"]
+focus_pane_down = ["prefix+j", "prefix+down", "alt+down"]
+focus_pane_up = ["prefix+k", "prefix+up", "alt+up"]
+focus_pane_right = ["prefix+l", "prefix+right", "alt+right"]
+# tmux default resize bindings: prefix + C-arrow
+resize_pane_left = "prefix+ctrl+left"
+resize_pane_down = "prefix+ctrl+down"
+resize_pane_up = "prefix+ctrl+up"
+resize_pane_right = "prefix+ctrl+right"
