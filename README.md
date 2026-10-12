@@ -282,7 +282,7 @@ Run `shell:startup` and add shortcuts.
 
 ## Tests
 
-Shell function tests live in `tests/` (ignored by chezmoi) and use [bats](https://github.com/bats-core/bats-core). The pre-commit hook runs them when `dot_bashrc.d/` or `tests/` changes. To run manually:
+Shell function and script tests live in `tests/` (ignored by chezmoi) and use [bats](https://github.com/bats-core/bats-core). The pre-commit hook runs them when `dot_bashrc.d/`, `dot_local/bin/`, or `tests/` changes. To run manually:
 
 ```sh
 prek run bats --all-files
@@ -309,6 +309,10 @@ history -w
 ### Release-delayed externals
 
 Externals that track GitHub releases use `.chezmoitemplates/github-release-asset-url`, which picks the newest stable release at least 7 days old so a compromised release has time to be pulled first. It makes a couple of GitHub API calls per external, which can hit the 60/hour unauthenticated limit; set `GITHUB_TOKEN` (or `CHEZMOI_GITHUB_ACCESS_TOKEN`) to avoid it.
+
+### File picker
+
+`prefix+F` (tmux) / `prefix+shift+f` (herdr) opens `~/.local/bin/file-picker` in a popup: fzf over the pane's directory with a bat preview. `Tab` marks multiple files, `Enter` types them into the pane — as `@path` mentions when the pane runs Claude, shell-escaped otherwise.
 
 ## Teardown
 
