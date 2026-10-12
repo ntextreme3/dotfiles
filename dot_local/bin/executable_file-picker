@@ -1,1 +1,60 @@
 #!/usr/bin/env bash
+#
+# file-picker: fzf file selector for a tmux or herdr popup
+#
+# Searches the directory of the pane under the popup, lets fzf multi-select
+# with a bat preview, then types the picks into that pane. Panes running
+# Claude get `@path` mentions; everything else gets shell-escaped paths.
+#
+# Inspired by https://github.com/raine/tmux-file-picker
+#
+set -euo pipefail
+
+# --- Target pane ---
+# herdr popups don't get HERDR_PANE_ID, only the pane they cover. Checked
+# before $TMUX so herdr running inside tmux targets the herdr pane.
+if [[ -n "${HERDR_ACTIVE_PANE_ID-}" ]]; then
+  pane="$HERDR_ACTIVE_PANE_ID"
+  info=$(herdr pane get "$pane")
+  # foreground_cwd follows `cd` in the pane; cwd is where it was launched.
+  pane_dir=$(jq -r '.result.pane.foreground_cwd // .result.pane.cwd // empty' <<<"$info")
+  [[ $(jq -r '.result.pane.agent // empty' <<<"$info") == claude ]] && is_claude=true || is_claude=false
+  send() { herdr pane send-text "$pane" "$1" >/dev/null; }
+elif [[ -n "${TMUX-}" ]]; then
+  # A popup has no pane of its own, so these resolve to the client's pane.
+  pane=$(tmux display-message -p '#{pane_id}')
+  pane_dir=$(tmux display-message -p '#{pane_current_path}')
+  pgrep -P "$(tmux display-message -p '#{pane_pid}')" -f claude >/dev/null && is_claude=true || is_claude=false
+  # -l sends literally; otherwise a file named e.g. `Enter` becomes a key.
+  send() { tmux send-keys -l -t "$pane" "$1"; }
+else
+  echo "file-picker: must run inside tmux or herdr" >&2
+  exit 1
+fi
+
+cd "${pane_dir:-.}"
+
+# --- Pick ---
+# fzf exits non-zero when cancelled; treat that as picking nothing.
+picks=$(
+  fd --hidden --follow --exclude .git --type f \
+    | fzf --multi \
+          --layout=reverse \
+          --tiebreak=index \
+          --preview 'bat --style=numbers --color=always {}' \
+          --preview-window=right:60%:wrap
+) || exit 0
+
+# --- Format and send ---
+# Trailing space so the next word typed starts fresh (and closes Claude's
+# @-completion menu).
+out=""
+while IFS= read -r path; do
+  if $is_claude; then
+    out+="@$path "
+  else
+    out+="$(printf '%q' "$path") "
+  fi
+done <<<"$picks"
+
+send "$out"
