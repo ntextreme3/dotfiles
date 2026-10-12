@@ -306,6 +306,10 @@ history -r .bash_history.merged
 history -w
 ```
 
+### Release-delayed externals
+
+Externals that track GitHub releases use `.chezmoitemplates/github-release-asset-url`, which picks the newest stable release at least 7 days old so a compromised release has time to be pulled first. It makes a couple of GitHub API calls per external, which can hit the 60/hour unauthenticated limit; set `GITHUB_TOKEN` (or `CHEZMOI_GITHUB_ACCESS_TOKEN`) to avoid it.
+
 ## Teardown
 
 Reminder to purge old pc. Check the Teardown note.

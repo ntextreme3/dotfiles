@@ -1,0 +1,22 @@
+{{- /*
+  URL of a GitHub release asset from the newest stable release that's at
+  least `days` old, so a compromised release has time to be caught and
+  pulled before it lands here.
+
+  Args (dict): repo ("owner/name"), asset (glob, as gitHubReleaseAssetURL),
+  days (optional, default 7).
+
+  gitHubReleases only returns the latest 30 releases; fail loudly rather
+  than install nothing if none of them is old enough.
+*/ -}}
+{{- /* chezmoi templates error on missing keys, so `get` the optional one. */ -}}
+{{- $days := get . "days" | default 7 -}}
+{{- $cutoff := now | dateModify (printf "-%dh" (mul $days 24)) -}}
+{{- $tag := "" -}}
+{{- range (gitHubReleases .repo) -}}
+{{-   if and (not $tag) (not .GetPrerelease) (not .GetDraft) (.GetPublishedAt.Time.Before $cutoff) -}}
+{{-     $tag = .GetTagName -}}
+{{-   end -}}
+{{- end -}}
+{{- if not $tag }}{{ fail (printf "%s: no stable release older than %d days" .repo $days) }}{{ end -}}
+{{- gitHubReleaseAssetURL .repo $tag .asset -}}
