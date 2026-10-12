@@ -8,5 +8,5 @@ repos:
         language: node
         additional_dependencies: ["bats@1.13.0"]
         entry: bats tests/
-        files: ^(dot_bashrc\.d/|tests/)
+        files: ^(dot_bashrc\.d/|dot_local/bin/|tests/)
         pass_filenames: false
