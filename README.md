@@ -314,6 +314,8 @@ Externals that track GitHub releases use `.chezmoitemplates/github-release-asset
 
 `prefix+F` (tmux) / `prefix+shift+f` (herdr) opens `~/.local/bin/file-picker` in a popup: fzf over the pane's directory with a bat preview. `Tab` marks multiple files, `Enter` types them into the pane — as `@path` mentions when the pane runs Claude, shell-escaped otherwise.
 
+To search elsewhere without leaving the popup: `alt-u` goes up a directory, `alt-g` jumps to the repo root, `alt-o` goes into the highlighted file's directory, `alt-r` picks a recent directory with `cdr-pick` (the picker behind `cdr`), and `alt-.` returns to the pane's directory. Files outside the pane's directory are sent as absolute paths.
+
 ## Teardown
 
 Reminder to purge old pc. Check the Teardown note.
