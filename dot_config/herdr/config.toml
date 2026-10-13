@@ -19,12 +19,16 @@ goto = ["prefix+g", "prefix+w"]
 
 # --- Workspaces (tmux sessions) ---
 rename_workspace = "prefix+$"
-previous_workspace = "prefix+("
-next_workspace = "prefix+)"
+# ctrl+alt+up/down walk workspaces without the prefix, matching the sidebar
+previous_workspace = ["prefix+(", "ctrl+alt+up"]
+next_workspace = ["prefix+)", "ctrl+alt+down"]
 
 # --- Tabs (tmux windows) ---
-# new_tab (prefix+c), next/previous_tab (prefix+n/p), and switch_tab
-# (prefix+1..9) already match tmux defaults.
+# new_tab (prefix+c) and switch_tab (prefix+1..9) already match tmux
+# defaults. ctrl+alt+left/right walk tabs without the prefix, matching the
+# tab bar.
+previous_tab = ["prefix+p", "ctrl+alt+left"]
+next_tab = ["prefix+n", "ctrl+alt+right"]
 rename_tab = "prefix+comma"
 close_tab = "prefix+ampersand"
 
