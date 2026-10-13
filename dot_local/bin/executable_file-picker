@@ -5,6 +5,7 @@
 # Searches the directory of the pane under the popup, lets fzf multi-select
 # with a bat preview, then types the picks into that pane. Panes running
 # Claude get `@path` mentions; everything else gets shell-escaped paths.
+# Alt keys switch the search to other dirs (see the in-popup header).
 #
 # Inspired by https://github.com/raine/tmux-file-picker
 #
@@ -32,24 +33,73 @@ else
   exit 1
 fi
 
-cd "${pane_dir:-.}"
+# Canonical, so the under-the-pane check below compares like with like.
+pane_dir=$(cd "${pane_dir:-.}" && pwd -P)
 
 # --- Pick ---
-# fzf exits non-zero when cancelled; treat that as picking nothing.
-picks=$(
-  fd --hidden --follow --exclude .git --type f \
-    | fzf --multi \
-          --layout=reverse \
-          --tiebreak=index \
-          --preview 'bat --style=numbers --color=always {}' \
-          --preview-window=right:60%:wrap
-) || exit 0
+# The alt keys end fzf (--expect) so the loop can search from another dir;
+# the query carries over so you can keep looking for the same file.
+header=$'alt-r recent dirs (cdr)   alt-g repo root\nalt-u up   alt-o into dir   alt-. back'
+root="$pane_dir"
+query=""
+while true; do
+  cd "$root"
+  # fzf exits 1 when nothing matches, even if an alt key was pressed, so
+  # only treat other failures (cancel = 130) as picking nothing.
+  out=$(
+    fd --hidden --follow --exclude .git --type f \
+      | fzf --multi \
+            --layout=reverse \
+            --tiebreak=index \
+            --print-query \
+            --expect=alt-r,alt-g,alt-u,alt-o,alt-. \
+            --query "$query" \
+            --border=rounded \
+            --border-label " ${root/#"$HOME"/\~} " \
+            --border-label-pos=3 \
+            --header "$header" \
+            --header-border=rounded \
+            --header-label ' search from ' \
+            --ghost 'type to filter · tab marks · enter sends' \
+            --preview 'bat --style=numbers --color=always {}' \
+            --preview-window=right:50%:wrap
+  ) && status=0 || status=$?
+  (( status <= 1 )) || exit 0
+
+  query=$(sed -n 1p <<<"$out")
+  key=$(sed -n 2p <<<"$out")
+  picks=$(sed 1,2d <<<"$out")
+
+  case "$key" in
+    alt-r)
+      # cdr-pick may print a home- or cwd-relative dir; cancelling stays put.
+      dir=$(cdr-pick) && [[ -n "$dir" ]] && root=$(cd "$dir" 2>/dev/null && pwd -P) || root="$PWD"
+      ;;
+    alt-g) root=$(git rev-parse --show-toplevel 2>/dev/null) || root="$PWD" ;;
+    alt-u) root=$(dirname "$root") ;;
+    alt-o)
+      # With nothing marked, fzf prints the highlighted line.
+      if [[ -n "$picks" ]]; then
+        root=$(cd "$(dirname "$(head -1 <<<"$picks")")" && pwd -P)
+      fi
+      query=""
+      ;;
+    alt-.) root="$pane_dir" ;;
+    *) break ;;
+  esac
+done
+
+[[ -n "$picks" ]] || exit 0
 
 # --- Format and send ---
-# Trailing space so the next word typed starts fresh (and closes Claude's
-# @-completion menu).
+# Picks under the pane's dir stay relative to it; anything else is absolute
+# so the receiving app needn't know where we searched from. Trailing space
+# so the next word typed starts fresh (and closes Claude's @-completion
+# menu).
 out=""
 while IFS= read -r path; do
+  path="${root%/}/$path"
+  [[ "$path" == "$pane_dir"/* ]] && path="${path#"$pane_dir"/}"
   if $is_claude; then
     out+="@$path "
   else
