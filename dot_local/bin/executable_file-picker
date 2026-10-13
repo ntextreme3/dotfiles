@@ -3,7 +3,7 @@
 # file-picker: fzf file selector for a tmux or herdr popup
 #
 # Searches the directory of the pane under the popup, lets fzf multi-select
-# with a bat preview, then types the picks into that pane. Panes running
+# files and/or dirs with a preview, then types the picks into that pane. Panes running
 # Claude get `@path` mentions; everything else gets shell-escaped paths.
 # Alt keys switch the search to other dirs (see the in-popup header).
 #
@@ -39,29 +39,35 @@ pane_dir=$(cd "${pane_dir:-.}" && pwd -P)
 # --- Pick ---
 # The alt keys end fzf (--expect) so the loop can search from another dir;
 # the query carries over so you can keep looking for the same file.
-header=$'alt-r recent dirs (cdr)   alt-g repo root\nalt-u up   alt-o into dir   alt-. back'
+header=$'alt-r recent dirs (cdr)   alt-g repo root\nalt-u up   alt-o into dir   alt-. back\nctrl-t files/dirs/both   alt-enter send this dir'
 root="$pane_dir"
 query=""
+mode=files
 while true; do
   cd "$root"
+  case "$mode" in
+    files) types=(--type f) ;;
+    dirs) types=(--type d) ;;
+    both) types=(--type f --type d) ;;
+  esac
   # fzf exits 1 when nothing matches, even if an alt key was pressed, so
   # only treat other failures (cancel = 130) as picking nothing.
   out=$(
-    fd --hidden --follow --exclude .git --type f \
+    fd --hidden --follow --exclude .git "${types[@]}" \
       | fzf --multi \
             --layout=reverse \
             --tiebreak=index \
             --print-query \
-            --expect=alt-r,alt-g,alt-u,alt-o,alt-. \
+            --expect=alt-r,alt-g,alt-u,alt-o,alt-.,ctrl-t,alt-enter \
             --query "$query" \
             --border=rounded \
-            --border-label " ${root/#"$HOME"/\~} " \
+            --border-label " ${root/#"$HOME"/\~} · $mode " \
             --border-label-pos=3 \
             --header "$header" \
             --header-border=rounded \
             --header-label ' search from ' \
             --ghost 'type to filter · tab marks · enter sends' \
-            --preview 'bat --style=numbers --color=always {}' \
+            --preview 'if [ -d {} ]; then tree -C -L 2 {}; else bat --style=numbers --color=always {}; fi' \
             --preview-window=right:50%:wrap
   ) && status=0 || status=$?
   (( status <= 1 )) || exit 0
@@ -78,13 +84,25 @@ while true; do
     alt-g) root=$(git rev-parse --show-toplevel 2>/dev/null) || root="$PWD" ;;
     alt-u) root=$(dirname "$root") ;;
     alt-o)
-      # With nothing marked, fzf prints the highlighted line.
+      # With nothing marked, fzf prints the highlighted line. A highlighted
+      # dir is entered itself; a file means its containing dir.
       if [[ -n "$picks" ]]; then
-        root=$(cd "$(dirname "$(head -1 <<<"$picks")")" && pwd -P)
+        dir=$(head -1 <<<"$picks")
+        [[ -d "$dir" ]] || dir=$(dirname "$dir")
+        root=$(cd "$dir" && pwd -P)
       fi
       query=""
       ;;
     alt-.) root="$pane_dir" ;;
+    ctrl-t)
+      case "$mode" in
+        files) mode=dirs ;;
+        dirs) mode=both ;;
+        both) mode=files ;;
+      esac
+      ;;
+    # ./ stands for the search dir itself; fd never prints a ./ prefix.
+    alt-enter) picks=./; break ;;
     *) break ;;
   esac
 done
@@ -98,8 +116,12 @@ done
 # menu).
 out=""
 while IFS= read -r path; do
-  path="${root%/}/$path"
-  [[ "$path" == "$pane_dir"/* ]] && path="${path#"$pane_dir"/}"
+  path="${root%/}/${path#./}"
+  if [[ "$path" == "$pane_dir"/ ]]; then
+    path=./
+  elif [[ "$path" == "$pane_dir"/* ]]; then
+    path="${path#"$pane_dir"/}"
+  fi
   if $is_claude; then
     out+="@$path "
   else
