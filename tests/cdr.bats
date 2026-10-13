@@ -1,9 +1,9 @@
-# Tests for _cdr_candidates (dot_bashrc.d/base/cdr.sh)
+# Tests for _cdr_candidates (dot_local/bin/executable_cdr-pick)
 #
 # Run: prek run bats --all-files
 
 setup() {
-  source "$BATS_TEST_DIRNAME/../dot_bashrc.d/base/cdr.sh"
+  source "$BATS_TEST_DIRNAME/../dot_local/bin/executable_cdr-pick"
   export HOME=/home/u
   export HISTFILE="$BATS_TEST_TMPDIR/history"
 }

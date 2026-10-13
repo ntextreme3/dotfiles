@@ -13,7 +13,7 @@ setup_stubs() {
     echo "$n" >"$FZF_DIR/calls"
     printf "%s\0" "$@" >"$FZF_DIR/args.$n"
     pwd >"$FZF_DIR/cwd.$n"
-    [ -t 0 ] || cat >/dev/null
+    [ -p /dev/stdin ] && cat >/dev/null
     [ -e "$FZF_DIR/out.$n" ] || exit 130
     cat "$FZF_DIR/out.$n"'
 }

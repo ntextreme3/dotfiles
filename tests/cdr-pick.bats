@@ -16,38 +16,38 @@ setup() {
 
 @test "ctrl-d prints a home-relative pick under \$HOME" {
   fzf_returns $'ctrl-d\nsrc/proj'
-  run bash "$SCRIPT"
+  run bash "$SCRIPT" </dev/null
   [ "$status" -eq 0 ]
   [ "$output" = "$HOME/src/proj" ]
 }
 
 @test "ctrl-d prints an absolute pick as-is" {
   fzf_returns $'ctrl-d\n/tmp/x'
-  run bash "$SCRIPT"
+  run bash "$SCRIPT" </dev/null
   [ "$output" = /tmp/x ]
 }
 
 @test "ctrl-d prints a pick missing from \$HOME as given" {
   fzf_returns $'ctrl-d\nelsewhere'
-  run bash "$SCRIPT"
+  run bash "$SCRIPT" </dev/null
   [ "$output" = elsewhere ]
 }
 
 @test "enter locates the pick with a second fzf and prints its choice" {
   fzf_returns $'\nsrc/proj' "$HOME/src/proj"
-  run bash "$SCRIPT"
+  run bash "$SCRIPT" </dev/null
   [ "$status" -eq 0 ]
   [ "$output" = "$HOME/src/proj" ]
   fzf_args 2 | grep -qxF "'proj/'"
 }
 
 @test "passes its argument as the initial query" {
-  run bash "$SCRIPT" proj
+  run bash "$SCRIPT" proj </dev/null
   fzf_args 1 | grep -qxF proj
 }
 
 @test "cancelling prints nothing and fails" {
-  run bash "$SCRIPT"
+  run bash "$SCRIPT" </dev/null
   [ "$status" -ne 0 ]
   [ -z "$output" ]
 }
