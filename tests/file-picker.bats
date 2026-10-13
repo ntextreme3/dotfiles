@@ -16,14 +16,16 @@ setup() {
   setup_stubs
   export HOME="$BATS_TEST_TMPDIR"
   export SENT="$BATS_TEST_TMPDIR/sent" FD_CWDS="$BATS_TEST_TMPDIR/fd-cwds"
+  export FD_ARGS="$BATS_TEST_TMPDIR/fd-args"
   REPO="$BATS_TEST_TMPDIR/repo"
   export PANE_DIR="$REPO/project"
   ELSEWHERE="$BATS_TEST_TMPDIR/elsewhere"
   mkdir -p "$PANE_DIR/sub" "$ELSEWHERE"
   git -C "$REPO" init -q
 
-  # Records each directory fd searched; the file list itself comes from fzf.
-  stub fd 'pwd >>"$FD_CWDS"'
+  # Records each directory fd searched and its args, one line per call; the
+  # file list itself comes from fzf.
+  stub fd 'pwd >>"$FD_CWDS"; echo "$*" >>"$FD_ARGS"'
   # Only claude panes have a matching child process.
   stub pgrep '[ "${PANE_AGENT-}" = claude ]'
   stub tmux '
@@ -63,6 +65,11 @@ assert_searched() {
     printf 'search %s: expected %s, got %s\n' "$1" "$2" "$actual"
     return 1
   fi
+}
+
+# Print the --type values fd call $1 searched for, space-separated.
+fd_types() {
+  sed -n "${1}p" "$FD_ARGS" | grep -oE -- '--type [a-z]' | cut -c8- | paste -sd' '
 }
 
 @test "tmux: sends shell-escaped picks literally to the pane" {
@@ -196,5 +203,59 @@ assert_searched() {
 @test "labels the border with the search directory" {
   fzf_returns $'\n\na.py'
   pick_in_tmux
-  fzf_args 1 | grep -qxF ' ~/repo/project '
+  fzf_args 1 | grep -qxF ' ~/repo/project · files '
+}
+
+@test "ctrl-t cycles files, dirs, both, then back to files" {
+  fzf_returns $'\nctrl-t\nx' $'\nctrl-t\nx' $'\nctrl-t\nx' $'\n\na.py'
+  pick_in_tmux
+  local n types=(f d 'f d' f) labels=(files dirs both files)
+  for n in 1 2 3 4; do
+    [ "$(fd_types "$n")" = "${types[n - 1]}" ]
+    fzf_args "$n" | grep -qxF " ~/repo/project · ${labels[n - 1]} "
+  done
+}
+
+@test "ctrl-t keeps the query and search directory" {
+  fzf_returns $'needle\nalt-u\nx' $'needle\nctrl-t\nx' $'\n\na.py'
+  pick_in_tmux
+  assert_searched 3 "$REPO"
+  fzf_args 3 | grep -qxF needle
+}
+
+@test "the mode survives switching directories" {
+  fzf_returns $'\nctrl-t\nx' $'\nalt-u\nx' $'\n\na.py'
+  pick_in_tmux
+  [ "$(fd_types 3)" = d ]
+}
+
+@test "alt-o on a directory searches inside it" {
+  fzf_returns $'\nctrl-t\nx' $'\nalt-o\nsub/' $'\n\nb.py'
+  pick_in_tmux
+  assert_searched 3 "$PANE_DIR/sub"
+}
+
+@test "alt-enter sends the pane's directory as ./" {
+  fzf_returns $'\nalt-enter\nx'
+  pick_in_tmux PANE_AGENT=claude
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\n@./ ' ]
+}
+
+@test "alt-enter sends a search dir under the pane's dir relative to it" {
+  fzf_returns $'\nalt-o\nsub/a.py' $'\nalt-enter\nx'
+  pick_in_tmux
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\nsub/ ' ]
+}
+
+@test "alt-enter sends a search dir outside the pane's dir as absolute" {
+  fzf_returns $'\nalt-u\nx' $'\nalt-enter\nx'
+  pick_in_tmux
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\n'"$REPO/ " ]
+}
+
+@test "alt-enter works when nothing matched" {
+  fzf_returns $'zzz\nalt-enter'
+  fzf_status 1 1
+  pick_in_tmux
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\n./ ' ]
 }
