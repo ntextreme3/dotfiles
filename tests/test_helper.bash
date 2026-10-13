@@ -7,7 +7,8 @@ setup_stubs() {
   mkdir -p "$STUBS" "$FZF_DIR"
   export PATH="$STUBS:$PATH" FZF_DIR
   # Each call N records its args (NUL-separated) and cwd, then prints
-  # whatever fzf_returns gave it, or exits like a cancelled fzf.
+  # whatever fzf_returns gave it (exiting with any fzf_status), or exits
+  # like a cancelled fzf.
   stub fzf '
     n=$(( $(cat "$FZF_DIR/calls" 2>/dev/null || echo 0) + 1 ))
     echo "$n" >"$FZF_DIR/calls"
@@ -15,7 +16,8 @@ setup_stubs() {
     pwd >"$FZF_DIR/cwd.$n"
     [ -p /dev/stdin ] && cat >/dev/null
     [ -e "$FZF_DIR/out.$n" ] || exit 130
-    cat "$FZF_DIR/out.$n"'
+    cat "$FZF_DIR/out.$n"
+    exit "$(cat "$FZF_DIR/status.$n" 2>/dev/null || echo 0)"'
 }
 
 # Write an executable stub named $1 whose body is $2.
@@ -31,6 +33,11 @@ fzf_returns() {
     printf '%s\n' "$out" >"$FZF_DIR/out.$n"
     n=$((n + 1))
   done
+}
+
+# Make fzf call $1 exit with status $2 (after printing its output).
+fzf_status() {
+  echo "$2" >"$FZF_DIR/status.$1"
 }
 
 # Print the args fzf call $1 received, one per line.

@@ -1,22 +1,29 @@
 # Tests for dot_local/bin/executable_file-picker
 #
-# tmux, herdr, fd, fzf and pgrep are replaced by stubs on PATH. The stubs log
-# what the picker asked of them so tests can check what reached the pane.
+# tmux, herdr, fd, fzf, pgrep and cdr-pick are replaced by stubs on PATH (see
+# test_helper.bash). The stubs log what the picker asked of them so tests can
+# check what reached the pane.
+#
+# fzf runs with --print-query --expect, so each stubbed fzf output is: query
+# line, key line (empty for enter), then the picked paths.
 #
 # Run: prek run bats --all-files
 
+load test_helper
+
 setup() {
   SCRIPT="$BATS_TEST_DIRNAME/../dot_local/bin/executable_file-picker"
-  STUBS="$BATS_TEST_TMPDIR/bin"
-  SENT="$BATS_TEST_TMPDIR/sent"
-  FD_CWD="$BATS_TEST_TMPDIR/fd-cwd"
-  PANE_DIR="$BATS_TEST_TMPDIR/project"
-  mkdir -p "$STUBS" "$PANE_DIR"
+  setup_stubs
+  export HOME="$BATS_TEST_TMPDIR"
+  export SENT="$BATS_TEST_TMPDIR/sent" FD_CWDS="$BATS_TEST_TMPDIR/fd-cwds"
+  REPO="$BATS_TEST_TMPDIR/repo"
+  export PANE_DIR="$REPO/project"
+  ELSEWHERE="$BATS_TEST_TMPDIR/elsewhere"
+  mkdir -p "$PANE_DIR/sub" "$ELSEWHERE"
+  git -C "$REPO" init -q
 
-  # Records the directory fd searched; the file list itself comes from fzf.
-  stub fd 'pwd >"$FD_CWD"'
-  # Prints $FZF_PICKS as the selection, or exits like a cancelled fzf.
-  stub fzf 'cat >/dev/null; [ -n "${FZF_PICKS-}" ] || exit 130; printf "%s\n" "${FZF_PICKS[@]}" | tr "|" "\n"'
+  # Records each directory fd searched; the file list itself comes from fzf.
+  stub fd 'pwd >>"$FD_CWDS"'
   # Only claude panes have a matching child process.
   stub pgrep '[ "${PANE_AGENT-}" = claude ]'
   stub tmux '
@@ -36,58 +43,66 @@ setup() {
     esac'
 }
 
-# Write an executable stub named $1 whose body is $2.
-stub() {
-  printf '#!/usr/bin/env bash\n%s\n' "$2" >"$STUBS/$1"
-  chmod +x "$STUBS/$1"
-}
-
 # Run the picker as a tmux popup would: inside tmux, from some other dir.
 pick_in_tmux() {
   cd "$BATS_TEST_TMPDIR"
-  run env PATH="$STUBS:$PATH" TMUX=/tmp/tmux-sock,1,0 FD_CWD="$FD_CWD" SENT="$SENT" \
-    PANE_DIR="$PANE_DIR" "$@" bash "$SCRIPT"
+  run env TMUX=/tmp/tmux-sock,1,0 "$@" bash "$SCRIPT" </dev/null
 }
 
 # Run the picker as a herdr popup would: no HERDR_PANE_ID, only the active pane.
 pick_in_herdr() {
   cd "$BATS_TEST_TMPDIR"
-  run env -u TMUX PATH="$STUBS:$PATH" HERDR_ACTIVE_PANE_ID=w1:p2 FD_CWD="$FD_CWD" \
-    SENT="$SENT" PANE_DIR="$PANE_DIR" "$@" bash "$SCRIPT"
+  run env -u TMUX HERDR_ACTIVE_PANE_ID=w1:p2 "$@" bash "$SCRIPT" </dev/null
+}
+
+# Assert the Nth directory fd searched.
+assert_searched() {
+  local actual
+  actual=$(sed -n "${1}p" "$FD_CWDS")
+  if [ "$actual" != "$2" ]; then
+    printf 'search %s: expected %s, got %s\n' "$1" "$2" "$actual"
+    return 1
+  fi
 }
 
 @test "tmux: sends shell-escaped picks literally to the pane" {
-  pick_in_tmux FZF_PICKS="src/a b.py|Enter"
+  fzf_returns $'\n\nsrc/a b.py\nEnter'
+  pick_in_tmux
   [ "$status" -eq 0 ]
   [ "$(cat "$SENT")" = $'-l\n-t\n%7\nsrc/a\\ b.py Enter ' ]
 }
 
 @test "tmux: prefixes picks with @ when the pane runs claude" {
-  pick_in_tmux FZF_PICKS="src/a.py|README.md" PANE_AGENT=claude
+  fzf_returns $'\n\nsrc/a.py\nREADME.md'
+  pick_in_tmux PANE_AGENT=claude
   [ "$status" -eq 0 ]
   [ "$(cat "$SENT")" = $'-l\n-t\n%7\n@src/a.py @README.md ' ]
 }
 
 @test "tmux: searches the pane's directory" {
-  pick_in_tmux FZF_PICKS="a.py"
-  [ "$(cat "$FD_CWD")" = "$PANE_DIR" ]
+  fzf_returns $'\n\na.py'
+  pick_in_tmux
+  assert_searched 1 "$PANE_DIR"
 }
 
 @test "herdr: sends shell-escaped picks to the active pane" {
-  pick_in_herdr FZF_PICKS="src/a b.py"
+  fzf_returns $'\n\nsrc/a b.py'
+  pick_in_herdr
   [ "$status" -eq 0 ]
   [ "$(cat "$SENT")" = $'w1:p2\nsrc/a\\ b.py ' ]
 }
 
 @test "herdr: prefixes picks with @ when the pane runs claude" {
-  pick_in_herdr FZF_PICKS="src/a.py|README.md" PANE_AGENT=claude
+  fzf_returns $'\n\nsrc/a.py\nREADME.md'
+  pick_in_herdr PANE_AGENT=claude
   [ "$status" -eq 0 ]
   [ "$(cat "$SENT")" = $'w1:p2\n@src/a.py @README.md ' ]
 }
 
 @test "herdr: searches the pane's foreground directory" {
-  pick_in_herdr FZF_PICKS="a.py"
-  [ "$(cat "$FD_CWD")" = "$PANE_DIR" ]
+  fzf_returns $'\n\na.py'
+  pick_in_herdr
+  assert_searched 1 "$PANE_DIR"
 }
 
 @test "cancelling fzf sends nothing" {
@@ -96,9 +111,90 @@ pick_in_herdr() {
   [ ! -e "$SENT" ]
 }
 
+@test "enter with nothing matched sends nothing" {
+  fzf_returns $'zzz\n'
+  fzf_status 1 1
+  pick_in_tmux
+  [ "$status" -eq 0 ]
+  [ ! -e "$SENT" ]
+}
+
 @test "fails outside tmux and herdr" {
   cd "$BATS_TEST_TMPDIR"
-  run env -u TMUX -u HERDR_ACTIVE_PANE_ID PATH="$STUBS:$PATH" bash "$SCRIPT"
+  run env -u TMUX -u HERDR_ACTIVE_PANE_ID bash "$SCRIPT"
   [ "$status" -ne 0 ]
   [[ "$output" == *"tmux or herdr"* ]]
+}
+
+@test "alt-u searches the parent; picks outside the pane dir are absolute" {
+  fzf_returns $'\nalt-u\nx' $'\n\nother.txt'
+  pick_in_tmux
+  assert_searched 2 "$REPO"
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\n'"$REPO/other.txt " ]
+}
+
+@test "alt-u: picks under the pane dir stay relative" {
+  fzf_returns $'\nalt-u\nx' $'\n\nproject/sub/a.py'
+  pick_in_tmux
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\nsub/a.py ' ]
+}
+
+@test "alt-u works when nothing matched" {
+  fzf_returns $'zzz\nalt-u' $'\n\nother.txt'
+  fzf_status 1 1
+  pick_in_tmux
+  assert_searched 2 "$REPO"
+}
+
+@test "alt-g searches the repo root" {
+  fzf_returns $'\nalt-g\nx' $'\n\na.py'
+  pick_in_tmux
+  assert_searched 2 "$REPO"
+}
+
+@test "alt-g outside a repo stays put" {
+  rm -rf "$REPO/.git"
+  fzf_returns $'\nalt-g\nx' $'\n\na.py'
+  pick_in_tmux
+  assert_searched 2 "$PANE_DIR"
+}
+
+@test "alt-o searches the highlighted file's directory" {
+  fzf_returns $'\nalt-o\nsub/a.py' $'\n\nb.py'
+  pick_in_tmux
+  assert_searched 2 "$PANE_DIR/sub"
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\nsub/b.py ' ]
+}
+
+@test "alt-. returns to the pane's directory" {
+  fzf_returns $'\nalt-u\nx' $'\nalt-.\nx' $'\n\na.py'
+  pick_in_tmux
+  assert_searched 3 "$PANE_DIR"
+}
+
+@test "alt-r searches the directory cdr-pick prints" {
+  stub cdr-pick "echo '$ELSEWHERE'"
+  fzf_returns $'\nalt-r\nx' $'\n\nnote.md'
+  pick_in_tmux PANE_AGENT=claude
+  assert_searched 2 "$ELSEWHERE"
+  [ "$(cat "$SENT")" = $'-l\n-t\n%7\n'"@$ELSEWHERE/note.md " ]
+}
+
+@test "alt-r: cancelling cdr-pick stays put" {
+  stub cdr-pick 'exit 130'
+  fzf_returns $'\nalt-r\nx' $'\n\na.py'
+  pick_in_tmux
+  assert_searched 2 "$PANE_DIR"
+}
+
+@test "keeps the query when switching directories" {
+  fzf_returns $'needle\nalt-u\nx' $'\n\na.py'
+  pick_in_tmux
+  fzf_args 2 | grep -qxF needle
+}
+
+@test "labels the border with the search directory" {
+  fzf_returns $'\n\na.py'
+  pick_in_tmux
+  fzf_args 1 | grep -qxF ' ~/repo/project '
 }
