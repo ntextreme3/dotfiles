@@ -39,7 +39,7 @@ pane_dir=$(cd "${pane_dir:-.}" && pwd -P)
 # --- Pick ---
 # The alt keys end fzf (--expect) so the loop can search from another dir;
 # the query carries over so you can keep looking for the same file.
-header=$'alt-r recent dirs (cdr)   alt-g repo root\nalt-u up   alt-o into dir   alt-. back\nctrl-t files/dirs/both   alt-enter send this dir'
+header=$'alt-r recent dirs (cdr)   alt-g repo root\nalt-u up   alt-o into dir   alt-. back\nctrl-t files/dirs/both   alt-s send this dir'
 root="$pane_dir"
 query=""
 mode=files
@@ -58,7 +58,7 @@ while true; do
             --layout=reverse \
             --tiebreak=index \
             --print-query \
-            --expect=alt-r,alt-g,alt-u,alt-o,alt-.,ctrl-t,alt-enter \
+            --expect=alt-r,alt-g,alt-u,alt-o,alt-.,ctrl-t,alt-s \
             --query "$query" \
             --border=rounded \
             --border-label " ${root/#"$HOME"/\~} · $mode " \
@@ -102,7 +102,7 @@ while true; do
       esac
       ;;
     # ./ stands for the search dir itself; fd never prints a ./ prefix.
-    alt-enter) picks=./; break ;;
+    alt-s) picks=./; break ;;
     *) break ;;
   esac
 done

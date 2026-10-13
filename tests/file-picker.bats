@@ -235,26 +235,26 @@ fd_types() {
   assert_searched 3 "$PANE_DIR/sub"
 }
 
-@test "alt-enter sends the pane's directory as ./" {
-  fzf_returns $'\nalt-enter\nx'
+@test "alt-s sends the pane's directory as ./" {
+  fzf_returns $'\nalt-s\nx'
   pick_in_tmux PANE_AGENT=claude
   [ "$(cat "$SENT")" = $'-l\n-t\n%7\n@./ ' ]
 }
 
-@test "alt-enter sends a search dir under the pane's dir relative to it" {
-  fzf_returns $'\nalt-o\nsub/a.py' $'\nalt-enter\nx'
+@test "alt-s sends a search dir under the pane's dir relative to it" {
+  fzf_returns $'\nalt-o\nsub/a.py' $'\nalt-s\nx'
   pick_in_tmux
   [ "$(cat "$SENT")" = $'-l\n-t\n%7\nsub/ ' ]
 }
 
-@test "alt-enter sends a search dir outside the pane's dir as absolute" {
-  fzf_returns $'\nalt-u\nx' $'\nalt-enter\nx'
+@test "alt-s sends a search dir outside the pane's dir as absolute" {
+  fzf_returns $'\nalt-u\nx' $'\nalt-s\nx'
   pick_in_tmux
   [ "$(cat "$SENT")" = $'-l\n-t\n%7\n'"$REPO/ " ]
 }
 
-@test "alt-enter works when nothing matched" {
-  fzf_returns $'zzz\nalt-enter'
+@test "alt-s works when nothing matched" {
+  fzf_returns $'zzz\nalt-s'
   fzf_status 1 1
   pick_in_tmux
   [ "$(cat "$SENT")" = $'-l\n-t\n%7\n./ ' ]
