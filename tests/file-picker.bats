@@ -206,8 +206,8 @@ fd_types() {
   fzf_args 1 | grep -qxF ' ~/repo/project · files '
 }
 
-@test "ctrl-t cycles files, dirs, both, then back to files" {
-  fzf_returns $'\nctrl-t\nx' $'\nctrl-t\nx' $'\nctrl-t\nx' $'\n\na.py'
+@test "alt-t cycles files, dirs, both, then back to files" {
+  fzf_returns $'\nalt-t\nx' $'\nalt-t\nx' $'\nalt-t\nx' $'\n\na.py'
   pick_in_tmux
   local n types=(f d 'f d' f) labels=(files dirs both files)
   for n in 1 2 3 4; do
@@ -216,21 +216,21 @@ fd_types() {
   done
 }
 
-@test "ctrl-t keeps the query and search directory" {
-  fzf_returns $'needle\nalt-u\nx' $'needle\nctrl-t\nx' $'\n\na.py'
+@test "alt-t keeps the query and search directory" {
+  fzf_returns $'needle\nalt-u\nx' $'needle\nalt-t\nx' $'\n\na.py'
   pick_in_tmux
   assert_searched 3 "$REPO"
   fzf_args 3 | grep -qxF needle
 }
 
 @test "the mode survives switching directories" {
-  fzf_returns $'\nctrl-t\nx' $'\nalt-u\nx' $'\n\na.py'
+  fzf_returns $'\nalt-t\nx' $'\nalt-u\nx' $'\n\na.py'
   pick_in_tmux
   [ "$(fd_types 3)" = d ]
 }
 
 @test "alt-o on a directory searches inside it" {
-  fzf_returns $'\nctrl-t\nx' $'\nalt-o\nsub/' $'\n\nb.py'
+  fzf_returns $'\nalt-t\nx' $'\nalt-o\nsub/' $'\n\nb.py'
   pick_in_tmux
   assert_searched 3 "$PANE_DIR/sub"
 }
