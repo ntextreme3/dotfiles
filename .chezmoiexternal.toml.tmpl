@@ -28,13 +28,6 @@
     stripComponents = 1
     checksum.sha256 = "f92bf5db248417e6f62df1debc0dfe4f071f36f9c66bdf11c37c9c5712b06915"
 
-[".nvm"]
-    type = "archive"
-    url = "https://github.com/nvm-sh/nvm/archive/refs/tags/v0.40.1.zip"
-    exact = true
-    stripComponents = 1
-    checksum.sha256 = "9b50d624570504a18f434e2300030e30af6290d5a79317f6dddc6e75ace9e52e"
-
 {{- if eq .osid "linux-ubuntu" }}
 
 [".local/bin/age"]
@@ -80,6 +73,11 @@
 [".local/bin/herdr"]
     type = "file"
     url = {{ includeTemplate "github-release-asset-url" (dict "repo" "herdrdev/herdr" "asset" "herdr-linux-x86_64") | quote }}
+    executable = true
+
+[".local/bin/mise"]
+    type = "file"
+    url = {{ includeTemplate "github-release-asset-url" (dict "repo" "jdx/mise" "asset" "mise-v*-linux-x64") | quote }}
     executable = true
 
 [".cargo/bin/cargo-binstall"]

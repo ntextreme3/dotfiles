@@ -1,0 +1,9 @@
+[tools]
+node = "lts"
+
+[settings]
+# Same policy as the release-delayed chezmoi externals: give a compromised
+# release time to be pulled before it's installed.
+minimum_release_age = "7d"
+# chezmoi installs and updates mise itself, so `mise self-update` nags are noise.
+disable_update_warning = true

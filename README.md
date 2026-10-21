@@ -310,6 +310,10 @@ history -w
 
 Externals that track GitHub releases use `.chezmoitemplates/github-release-asset-url`, which picks the newest stable release at least 7 days old so a compromised release has time to be pulled first. It makes a couple of GitHub API calls per external, which can hit the 60/hour unauthenticated limit; set `GITHUB_TOKEN` (or `CHEZMOI_GITHUB_ACCESS_TOKEN`) to avoid it.
 
+### Runtimes (mise)
+
+[mise](https://mise.jdx.dev) manages node (LTS); add other runtimes under `[tools]` in `~/.config/mise/config.toml`. It honors the same 7-day release delay via `minimum_release_age`. Run `mise install` after a fresh `chezmoi apply`.
+
 ### File picker
 
 `prefix+F` (tmux) / `prefix+shift+f` (herdr) opens `~/.local/bin/file-picker` in a popup: fzf over the pane's directory with a preview (bat for files, tree for dirs). `Tab` marks multiple picks, `Enter` types them into the pane — as `@path` mentions when the pane runs Claude, shell-escaped otherwise.
