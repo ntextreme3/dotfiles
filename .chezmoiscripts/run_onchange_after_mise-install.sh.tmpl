@@ -2,4 +2,6 @@
 set -euo pipefail
 
 # mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+# ISO week, so tools are also upgraded on the first apply of each week: {{ output "date" "+%G-%V" | trim }}
 "$HOME/.local/bin/mise" install
+"$HOME/.local/bin/mise" upgrade

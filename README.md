@@ -312,7 +312,7 @@ Externals that track GitHub releases use `.chezmoitemplates/github-release-asset
 
 ### Runtimes (mise)
 
-[mise](https://mise.jdx.dev) manages node (LTS), go, and fzf; pin a project's go version with `mise use go@1.23` (writes `mise.toml`) and add other runtimes under `[tools]` in `~/.config/mise/config.toml`. It honors the same 7-day release delay via `minimum_release_age`. `chezmoi apply` runs `mise install` whenever that config changes.
+[mise](https://mise.jdx.dev) manages node (LTS), go, and most CLI tools (see `[tools]`); pin a project's go version with `mise use go@1.23` (writes `mise.toml`) and add other runtimes under `[tools]` in `~/.config/mise/config.toml`. It honors the same 7-day release delay via `minimum_release_age`. `chezmoi apply` runs `mise install` and `mise upgrade` when that config changes and on the first apply of each week.
 
 ### File picker
 

@@ -2,6 +2,16 @@
 node = "lts"
 go = "latest"
 fzf = "latest"
+delta = "latest"
+starship = "latest"
+bat = "latest"
+fd = "latest"
+ripgrep = "latest"
+jq = "latest"
+yq = "latest"
+kubectl = "latest"
+kubectx = "latest"
+jqp = "latest"
 
 [settings]
 # Same policy as the release-delayed chezmoi externals: give a compromised
