@@ -16,7 +16,7 @@ $SUDO yum install -y epel-release
 $SUDO yum install -y cmake bash-completion
 
 # install tools with yum
-$SUDO yum install -y curl git tmux ripgrep jq tree net-tools golang bat fd-find
+$SUDO yum install -y curl git tmux ripgrep jq tree net-tools bat fd-find
 
 # install rustup (for latest rust - yum rust package is often outdated)
 if ! command -v rustup &> /dev/null; then
@@ -35,9 +35,6 @@ cargo install --locked git-delta
 if ! command -v starship &> /dev/null; then
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
-
-# install tools with go
-go install github.com/junegunn/fzf@latest
 
 # NOTE: Skipping kubectl, kubectx, yq, jqp for now.
 

@@ -13,13 +13,9 @@ sudo apt install -y --no-upgrade curl git ripgrep jq rustup tree kubectx net-too
 # install tools with snap (on separate lines to avoid failures if one is already installed)
 sudo snap install jqp
 sudo snap install yq
-sudo snap install go --classic
 sudo snap install kubectl --classic
 
 # setup rust
 rustup default stable
-
-# install tools with go
-go install github.com/junegunn/fzf@latest
 
 {{ end -}}

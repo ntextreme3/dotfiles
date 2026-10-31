@@ -1,5 +1,7 @@
 [tools]
 node = "lts"
+go = "latest"
+fzf = "latest"
 
 [settings]
 # Same policy as the release-delayed chezmoi externals: give a compromised
