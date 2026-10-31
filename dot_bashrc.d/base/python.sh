@@ -1,5 +1,6 @@
 # uv
 export UV_MANAGED_PYTHON=1
+export UV_EXCLUDE_NEWER="7 days"
 
 # virtualenv defaults
 export VIRTUALENV_SYMLINK_APP_DATA=1
